@@ -4,20 +4,33 @@ module Handler.Home where
 import Import
 import State
 
--- This is a handler function for the GET request method on the HomeR
--- resource pattern. All of your resource patterns are defined in
--- config/routes
---
--- The majority of the code you will write in Yesod lives in these handler
--- functions. You can spread them across multiple files if you are so
--- inclined, or create a single monolithic file.
+data Post = Post Text
+
+postForm :: Html -> MForm Handler (FormResult Post, Widget)
+postForm = renderDivs $ Post
+    <$> areq textField "post" Nothing
+
 getHomeR :: Handler Html
 getHomeR = do
-    yesod <- getYesod
+    (widget, enctype) <- generateFormPost postForm
 
+    yesod <- getYesod
     cnt  <- liftIO $ incCounter $ counter yesod
+    pl <- liftIO $ getPosts $ posts yesod
 
     defaultLayout $ do
         aDomId <- newIdent
         setTitle "Welcome To Yesod!"
         $(widgetFile "homepage")
+
+postHomeR :: Handler Html
+postHomeR = do
+    ((result, widget), enctype) <- runFormPost postForm
+
+    yesod <- getYesod
+
+    let FormSuccess (Post post) = result
+
+    liftIO $ addPost (posts yesod) post
+
+    redirect HomeR

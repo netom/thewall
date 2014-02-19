@@ -72,9 +72,10 @@ makeFoundation conf = do
     _ <- forkIO updateLoop
 
     cnt <- atomically $ newTVar 0
+    pl <- atomically $ newTVar []
 
     let logger = Yesod.Core.Types.Logger loggerSet' getter
-        foundation = App conf s manager logger cnt
+        foundation = App conf s manager logger cnt pl
 
     return foundation
 
