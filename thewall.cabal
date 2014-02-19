@@ -19,6 +19,7 @@ library
                      Settings.StaticFiles
                      Settings.Development
                      Handler.Home
+                     Handler.Wall
                      State
 
     if flag(dev) || flag(library-only)
@@ -68,6 +69,7 @@ library
                  , fast-logger                   >= 2.1.4      && < 2.2
                  , wai-logger                    >= 2.1        && < 2.2
                  , stm
+                 , hashmap
 
 executable         thewall
     if flag(library-only)

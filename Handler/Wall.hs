@@ -1,5 +1,4 @@
-{-# LANGUAGE TupleSections, OverloadedStrings #-}
-module Handler.Home where
+module Handler.Wall where
 
 import Import
 import State
@@ -10,27 +9,28 @@ postForm :: Html -> MForm Handler (FormResult Post, Widget)
 postForm = renderDivs $ Post
     <$> areq textField "post" Nothing
 
-getHomeR :: Handler Html
-getHomeR = do
+getWallR :: Text -> Handler Html
+getWallR key = do
+    -- TODO: validate key length
     (widget, enctype) <- generateFormPost postForm
 
     yesod <- getYesod
 
-    pl <- liftIO $ getPosts (posts yesod) "123123 key 123123"
+    pl <- liftIO $ getPosts (posts yesod) key
 
     defaultLayout $ do
         aDomId <- newIdent
         setTitle "Welcome To Yesod!"
         $(widgetFile "homepage")
 
-postHomeR :: Handler Html
-postHomeR = do
+postWallR :: Text -> Handler Html
+postWallR key = do
     ((result, _), _) <- runFormPost postForm
 
     yesod <- getYesod
 
     let FormSuccess (Post post) = result
 
-    liftIO $ addPost (posts yesod) "123123 key 123123" post
+    liftIO $ addPost (posts yesod) key post
 
     redirect HomeR

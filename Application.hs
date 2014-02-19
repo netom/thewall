@@ -19,10 +19,12 @@ import System.Log.FastLogger (newStdoutLoggerSet, defaultBufSize)
 import Network.Wai.Logger (clockDateCacher)
 import Data.Default (def)
 import Yesod.Core.Types (loggerSet, Logger (Logger))
+import Data.HashMap -- TODO: move this to Import?
 
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
 import Handler.Home
+import Handler.Wall
 
 -- This line actually creates our YesodDispatch instance. It is the second half
 -- of the call to mkYesodData which occurs in Foundation.hs. Please see the
@@ -71,11 +73,10 @@ makeFoundation conf = do
             updateLoop
     _ <- forkIO updateLoop
 
-    cnt <- atomically $ newTVar 0
-    pl <- atomically $ newTVar []
+    pl <- atomically $ newTVar empty
 
     let logger = Yesod.Core.Types.Logger loggerSet' getter
-        foundation = App conf s manager logger cnt pl
+        foundation = App conf s manager logger pl
 
     return foundation
 

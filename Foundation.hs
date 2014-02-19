@@ -14,10 +14,11 @@ import Text.Jasmine (minifym)
 import Text.Hamlet (hamletFile)
 import Yesod.Core.Types (Logger)
 import Control.Concurrent.STM
-import Data.Text 
+import Data.Text
+import Data.HashMap
 
 -- Data type for storing posts
-type PostList = [Text]
+type PostList = Map Text [Text]
 
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -28,7 +29,6 @@ data App = App
     , getStatic :: Static -- ^ Settings for static file serving.
     , httpManager :: Manager
     , appLogger :: Logger
-    , counter :: TVar Integer
     , posts :: TVar PostList
     }
 

@@ -1,8 +1,5 @@
 <h1>_{MsgHello}
 
-<p>
-  Counter: #{cnt}
-
 <form method=post enctype=#{enctype}>
   ^{widget}
   <input type=submit value=Send>

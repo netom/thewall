@@ -1,18 +1,16 @@
 module State where
 
 import Import
+import Data.HashMap
 
-addPost :: TVar PostList -> Text -> IO ()
-addPost postlist post = atomically $ do
-    modifyTVar postlist (\pl -> take 100 $ post : pl)
+addPost :: TVar PostList -> Text -> Text -> IO ()
+addPost tvpostmap key post = atomically $ do
+    modifyTVar tvpostmap (alter updater key)
+    where
+        updater Nothing = Just [post]
+        updater (Just ps) = Just (post : ps)
 
-getPosts :: TVar PostList -> IO PostList
-getPosts postlist = atomically $ do
-    pl <- readTVar postlist
-    return pl
-
-incCounter :: TVar Integer -> IO Integer
-incCounter tvcount = atomically $ do
-    cnt <- readTVar tvcount
-    modifyTVar tvcount (\c -> c + 1)
-    return cnt
+getPosts :: TVar PostList -> Text -> IO [Text]
+getPosts tvpostmap key = atomically $ do
+    postmap <- readTVar tvpostmap
+    return $ findWithDefault [] key postmap
