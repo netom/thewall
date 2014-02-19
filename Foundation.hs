@@ -13,7 +13,7 @@ import Settings (widgetFile, Extra (..))
 import Text.Jasmine (minifym)
 import Text.Hamlet (hamletFile)
 import Yesod.Core.Types (Logger)
-import Data.IORef
+import Control.Concurrent.STM
 
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -24,12 +24,8 @@ data App = App
     , getStatic :: Static -- ^ Settings for static file serving.
     , httpManager :: Manager
     , appLogger :: Logger
-    , counter :: IORef Integer
+    , counter :: TVar Integer
     }
-
--- TODO: factor this the fuck out of here
-incCount :: IORef Integer -> IO Integer
-incCount cnt = atomicModifyIORef cnt (\c -> (c+1, c))
 
 -- Set up i18n messages. See the message folder.
 mkMessage "App" "messages" "en"

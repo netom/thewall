@@ -13,7 +13,12 @@ import Import
 getHomeR :: Handler Html
 getHomeR = do
     yesod <- getYesod
-    count  <- liftIO $ incCount $ counter yesod
+
+    count  <- liftIO $ atomically $ do
+        cnt <- readTVar $ counter yesod 
+        modifyTVar' (counter yesod) (\c -> c + 1)
+        return cnt
+
     defaultLayout $ do
         aDomId <- newIdent
         setTitle "Welcome To Yesod!"

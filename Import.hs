@@ -8,11 +8,13 @@ import           Yesod                as Import hiding (Route (..))
 
 import           Control.Applicative  as Import (pure, (<$>), (<*>))
 import           Data.Text            as Import (Text)
+import           Control.Concurrent.STM as Import hiding (check)
 
 import           Foundation           as Import
 import           Settings             as Import
 import           Settings.Development as Import
 import           Settings.StaticFiles as Import
+import           State                as Import
 
 #if __GLASGOW_HASKELL__ >= 704
 import           Data.Monoid          as Import
