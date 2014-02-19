@@ -2,6 +2,7 @@
 module Handler.Home where
 
 import Import
+import State
 
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
@@ -14,13 +15,9 @@ getHomeR :: Handler Html
 getHomeR = do
     yesod <- getYesod
 
-    count  <- liftIO $ atomically $ do
-        cnt <- readTVar $ counter yesod 
-        modifyTVar' (counter yesod) (\c -> c + 1)
-        return cnt
+    cnt  <- liftIO $ incCounter $ counter yesod
 
     defaultLayout $ do
         aDomId <- newIdent
         setTitle "Welcome To Yesod!"
         $(widgetFile "homepage")
-

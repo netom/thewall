@@ -19,7 +19,6 @@ import System.Log.FastLogger (newStdoutLoggerSet, defaultBufSize)
 import Network.Wai.Logger (clockDateCacher)
 import Data.Default (def)
 import Yesod.Core.Types (loggerSet, Logger (Logger))
-import Data.IORef
 
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
@@ -72,10 +71,10 @@ makeFoundation conf = do
             updateLoop
     _ <- forkIO updateLoop
 
-    count <- atomically $ newTVar 0
+    cnt <- atomically $ newTVar 0
 
     let logger = Yesod.Core.Types.Logger loggerSet' getter
-        foundation = App conf s manager logger count
+        foundation = App conf s manager logger cnt
 
     return foundation
 

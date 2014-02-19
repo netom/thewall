@@ -1,4 +1,4 @@
 <h1>_{MsgHello}
 
 <p>
-  Counter: #{count}
+  Counter: #{cnt}
