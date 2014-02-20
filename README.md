@@ -9,4 +9,3 @@ necessary.
 
 The site also can function without cookies and Javascript, so it is
 especially useful when strict security measures are in place.
-
