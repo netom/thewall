@@ -3,32 +3,40 @@ module Handler.Wall where
 import Import
 import State
 
-data Post = Post Text
-
-postForm :: Html -> MForm Handler (FormResult Post, Widget)
-postForm = renderDivs $ Post
-    <$> areq textField "post" Nothing
+postForm :: Maybe Post -> Html -> MForm Handler (FormResult Post, Widget)
+postForm post = renderDivs $ Post
+    <$> areq textField "Nick" (postNick <$> post)
+    <*> areq textField "Post" (postBody <$> post)
 
 getWallR :: Text -> Handler Html
 getWallR key = do
     -- TODO: validate key length
-    (widget, enctype) <- generateFormPost postForm
+    maybeNick <- lookupSession "nick"
+    let formNick = case maybeNick of
+                   Nothing -> ""
+                   Just nick -> nick
+
+    let post = Post formNick ""
+
+    (widget, enctype) <- generateFormPost $ postForm $ Just post
 
     yesod <- getYesod
 
-    pl <- liftIO $ getPosts (posts yesod) key
+    ps <- liftIO $ getPosts (posts yesod) key
 
     defaultLayout $ do
-        aDomId <- newIdent
         $(widgetFile "wall")
 
 postWallR :: Text -> Handler Html
 postWallR key = do
-    ((result, _), _) <- runFormPost postForm
+    ((result, _), _) <- runFormPost $ postForm Nothing
 
     yesod <- getYesod
 
-    let FormSuccess (Post post) = result
+    let FormSuccess post = result
+    let Post nick _ = post
+
+    setSession "nick" nick
 
     liftIO $ addPost (posts yesod) key post
 

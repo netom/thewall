@@ -4,6 +4,6 @@
   ^{widget}
   <input type=submit value=Send>
 
-$forall post <- pl
-  <p>
-    #{post}
+$forall post <- ps
+  <p class=post>
+    <span>#{postNick post}</span> #{postBody post}

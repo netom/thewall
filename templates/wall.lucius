@@ -1,0 +1,4 @@
+
+p.post span {
+    font-weight: bold;
+}

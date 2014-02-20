@@ -18,7 +18,13 @@ import Data.Text
 import Data.HashMap
 
 -- Data type for storing posts
-type PostList = Map Text [Text]
+data Post = Post
+    { postNick :: Text
+    , postBody :: Text
+    }
+
+-- A HashMap mapping from Text keys to Post lists
+type PostList = Map Text [Post]
 
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
