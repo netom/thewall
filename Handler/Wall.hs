@@ -22,7 +22,7 @@ getWallR key = do
 
     yesod <- getYesod
 
-    ps <- liftIO $ getPosts (posts yesod) key
+    PostList expire ps <- liftIO $ getPosts (posts yesod) key
 
     defaultLayout $ do
         $(widgetFile "wall")

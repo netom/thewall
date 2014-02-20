@@ -2,15 +2,21 @@ module State where
 
 import Import
 import Data.HashMap
+import Data.Time
 
-addPost :: TVar PostList -> Text -> Post -> IO ()
-addPost tvpostmap key post = atomically $ do
-    modifyTVar tvpostmap (alter updater key)
-    where
-        updater Nothing = Just [post]
-        updater (Just ps) = Just (post : ps)
+addPost :: TVar PostMap -> Text -> Post -> IO ()
+addPost tvpostmap key post = do
+    now <- getCurrentTime
+    let expires = addUTCTime (fromIntegral 86400) now -- TODO: config
+    atomically $ do
+        let updater Nothing = Just $ PostList expires [post]
+            updater (Just (PostList t ps)) = Just $ PostList expires (post : ps)
+            in modifyTVar tvpostmap (alter updater key)
 
-getPosts :: TVar PostList -> Text -> IO [Post]
-getPosts tvpostmap key = atomically $ do
-    postmap <- readTVar tvpostmap
-    return $ findWithDefault [] key postmap
+getPosts :: TVar PostMap -> Text -> IO PostList
+getPosts tvpostmap key = do
+    now <- getCurrentTime
+    let expires = addUTCTime (fromIntegral 86400) now -- TODO: config
+    atomically $ do
+        postmap <- readTVar tvpostmap
+        return $ findWithDefault (PostList expires []) key postmap

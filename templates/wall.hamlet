@@ -1,5 +1,8 @@
 <h1>_{MsgHello}
 
+<small>
+  This wall will expire at #{show expire}
+
 <form method=post enctype=#{enctype}>
   ^{widget}
   <input type=submit value=Send>

@@ -16,6 +16,7 @@ import Yesod.Core.Types (Logger)
 import Control.Concurrent.STM
 import Data.Text
 import Data.HashMap
+import Data.Time
 
 -- Data type for storing posts
 data Post = Post
@@ -23,8 +24,15 @@ data Post = Post
     , postBody :: Text
     }
 
+-- A "PostList" is actually a timestamp - list-of-posts pair.
+-- The timestamp shows when this particular list will expire.
+data PostList = PostList
+    { postListExpire :: UTCTime
+    , postListPosts  :: [Post]
+    }
+
 -- A HashMap mapping from Text keys to Post lists
-type PostList = Map Text [Post]
+type PostMap = Map Text PostList
 
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -35,7 +43,7 @@ data App = App
     , getStatic :: Static -- ^ Settings for static file serving.
     , httpManager :: Manager
     , appLogger :: Logger
-    , posts :: TVar PostList
+    , posts :: TVar PostMap
     }
 
 -- Set up i18n messages. See the message folder.
