@@ -1,0 +1,9 @@
+<h1>_{MsgHello}
+
+<form method=post enctype=#{enctype}>
+  ^{widget}
+  <input type=submit value=Send>
+
+$forall post <- pl
+  <p>
+    #{post}

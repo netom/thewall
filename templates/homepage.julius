@@ -1,1 +1,17 @@
-document.getElementById(#{toJSON aDomId}).innerHTML = "This text was added by the Javascript part of the homepage widget.";
+function randomString() {
+	var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+	var string_length = 32;
+	var randomstring = '';
+	for (var i=0; i<string_length; i++) {
+		var rnum = Math.floor(Math.random() * chars.length);
+		randomstring += chars.substring(rnum,rnum+1);
+	}
+    return randomstring;
+}
+
+$(document).ready(function(){
+    var walllink = location.href + "wall/" + randomString();
+    var a = $("#walllink");
+    a.html(walllink);
+    a.attr('href', walllink);
+});

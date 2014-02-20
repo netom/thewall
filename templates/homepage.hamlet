@@ -1,9 +1,7 @@
 <h1>_{MsgHello}
 
-<form method=post enctype=#{enctype}>
-  ^{widget}
-  <input type=submit value=Send>
+<p>
+  Dear Visitor!
 
-$forall post <- pl
-  <p>
-    #{post}
+<p>
+  Here is your link to a new wall: <a id="walllink" href="#"></a>

@@ -12,25 +12,6 @@ postForm = renderDivs $ Post
 
 getHomeR :: Handler Html
 getHomeR = do
-    (widget, enctype) <- generateFormPost postForm
-
-    yesod <- getYesod
-
-    pl <- liftIO $ getPosts (posts yesod) "123123 key 123123"
-
     defaultLayout $ do
-        aDomId <- newIdent
-        setTitle "Welcome To Yesod!"
+        setTitle "Welcome To The Wall!"
         $(widgetFile "homepage")
-
-postHomeR :: Handler Html
-postHomeR = do
-    ((result, _), _) <- runFormPost postForm
-
-    yesod <- getYesod
-
-    let FormSuccess (Post post) = result
-
-    liftIO $ addPost (posts yesod) "123123 key 123123" post
-
-    redirect HomeR

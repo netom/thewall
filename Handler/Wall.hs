@@ -20,8 +20,7 @@ getWallR key = do
 
     defaultLayout $ do
         aDomId <- newIdent
-        setTitle "Welcome To Yesod!"
-        $(widgetFile "homepage")
+        $(widgetFile "wall")
 
 postWallR :: Text -> Handler Html
 postWallR key = do
@@ -33,4 +32,4 @@ postWallR key = do
 
     liftIO $ addPost (posts yesod) key post
 
-    redirect HomeR
+    redirect (WallR key)

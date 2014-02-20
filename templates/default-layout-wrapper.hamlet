@@ -22,6 +22,7 @@ $newline never
 
         <script>
           document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/,'js');
+        <script src=http://code.jquery.com/jquery-1.10.2.min.js>
     <body>
         <div class="container">
             <header>
