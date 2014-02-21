@@ -4,7 +4,6 @@ TODO List
 To alpha release:
 
 * Limit the length of posts
-* Make post field a textares
 * Add expiration to hashmap buckets
 * Add gc call (/gc/<passkey in config>)
 * Do some basic design

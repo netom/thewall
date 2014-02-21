@@ -21,7 +21,7 @@ import Data.Time
 -- Data type for storing posts
 data Post = Post
     { postNick :: Text
-    , postBody :: Text
+    , postBody :: Textarea
     }
 
 -- A "PostList" is actually a timestamp - list-of-posts pair.

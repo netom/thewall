@@ -6,7 +6,7 @@ import State
 postForm :: Maybe Post -> Html -> MForm Handler (FormResult Post, Widget)
 postForm post = renderDivs $ Post
     <$> areq textField "Nick" (postNick <$> post)
-    <*> areq textField "Post" (postBody <$> post)
+    <*> areq textareaField "Post" (postBody <$> post)
 
 getWallR :: Text -> Handler Html
 getWallR key = do
@@ -16,7 +16,7 @@ getWallR key = do
                    Nothing -> ""
                    Just nick -> nick
 
-    let post = Post formNick ""
+    let post = Post formNick $ Textarea ""
 
     (widget, enctype) <- generateFormPost $ postForm $ Just post
 
