@@ -20,6 +20,7 @@ library
                      Settings.Development
                      Handler.Home
                      Handler.Wall
+                     Handler.Gc
                      State
 
     if flag(dev) || flag(library-only)
