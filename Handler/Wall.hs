@@ -37,8 +37,9 @@ getWallR key = do
     (widget, enctype) <- generateFormPost $ postForm $ Just post
 
     yesod <- getYesod
+    ttl <- fmap extraTtl getExtra
 
-    PostList expire ps <- liftIO $ getPosts (posts yesod) key
+    PostList expire ps <- liftIO $ getPosts (posts yesod) key ttl
 
     defaultLayout $ do
         $(widgetFile "wall")
@@ -53,7 +54,8 @@ postWallR key = do
         FormSuccess post -> do
             let Post nick _ = post
             setSession "nick" nick
-            liftIO $ addPost (posts yesod) key post
+            ttl <- fmap extraTtl getExtra
+            liftIO $ addPost (posts yesod) key post ttl
             redirect (WallR key)
         FormFailure err -> do
             setMessage $ toHtml ("Form error: " ++ show (err !! 0))
