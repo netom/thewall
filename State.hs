@@ -24,6 +24,4 @@ getPosts tvpostmap key ttl = do
 gcPosts :: TVar PostMap -> IO ()
 gcPosts tvpostmap = do
     now <- getCurrentTime
-    
-    return ()
     atomically $ modifyTVar tvpostmap (Data.HashMap.filter (\x -> postListExpire x >= now))

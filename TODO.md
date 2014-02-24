@@ -9,5 +9,6 @@ To beta release:
 
 * Better form validation
 * Add long poll or websocket reload (TChan in haskell for messaging)
-* Do some great design
 * Add tests
+* Add better expiration logic: make walls expire upon read / write ops.
+* Do some great design
