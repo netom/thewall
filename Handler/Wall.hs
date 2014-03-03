@@ -45,21 +45,21 @@ getWallR key = do
 
 postWallR :: Text -> Handler Html
 postWallR key = do
-    ((result, _), _) <- runFormPost $ postForm Nothing
+    ((result, widget), enctype) <- runFormPost $ postForm Nothing
 
     yesod <- getYesod
+    ttl <- fmap extraTtl getExtra
 
     case result of
         FormSuccess post -> do
             let Post nick _ = post
             setSession "nick" nick
-            ttl <- fmap extraTtl getExtra
             liftIO $ addPost (posts yesod) key post ttl
             redirect (WallR key)
         FormFailure err -> do
-            -- Set up a general message
-            setMessage $ toHtml ("Form error: " ++ show (err !! 0))
-            redirect (WallR key)
+            PostList expire ps <- liftIO $ getPosts (posts yesod) key ttl
+            defaultLayout $ do
+                $(widgetFile "wall")
         FormMissing -> do
             setMessage "No form data"
             redirect (WallR key)
