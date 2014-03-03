@@ -23,6 +23,8 @@ data Post = Post
     { postNick :: Text
     , postBody :: Textarea
     }
+-- TODO: validation function
+
 
 -- A "PostList" is actually a timestamp - list-of-posts pair.
 -- The timestamp shows when this particular list will expire.

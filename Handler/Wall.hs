@@ -19,15 +19,14 @@ postForm post = renderDivs $ Post
         | Data.Text.length n > 50 = Left nickLengthError
         | otherwise               = Right n
 
-    --validatePost :: Textarea -> Either Text Textarea
     validatePost p
         | Data.Text.length (unTextarea p) > 200 = Left postLengthError
         | otherwise               = Right p
 
 getWallR :: Text -> Handler Html
 getWallR key = do
-    -- TODO: validate key length
     maybeNick <- lookupSession "nick"
+
     let formNick = case maybeNick of
                    Nothing -> ""
                    Just nick -> nick
@@ -58,6 +57,7 @@ postWallR key = do
             liftIO $ addPost (posts yesod) key post ttl
             redirect (WallR key)
         FormFailure err -> do
+            -- Set up a general message
             setMessage $ toHtml ("Form error: " ++ show (err !! 0))
             redirect (WallR key)
         FormMissing -> do
