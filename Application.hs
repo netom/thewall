@@ -25,6 +25,7 @@ import Data.HashMap -- TODO: move this to Import?
 -- Don't forget to add new modules to your cabal file!
 import Handler.Home
 import Handler.Wall
+import Handler.Poll
 import Handler.Gc
 
 -- This line actually creates our YesodDispatch instance. It is the second half

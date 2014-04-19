@@ -24,12 +24,29 @@ data Post = Post
     , postBody :: Textarea
     }
 
--- A "PostList" is actually a timestamp - list-of-posts pair.
+instance ToJSON Post where
+    toJSON Post {..} = object
+        [ "nick" .= postNick
+        , "body" .= unTextarea postBody
+        ]
+
+
+-- A "PostList" is actually a timestamp, a list-of-posts, and a channel.
 -- The timestamp shows when this particular list will expire.
+-- Data type for possible events
+data PostListEvent = EventNewPost
+
 data PostList = PostList
-    { postListExpire :: UTCTime
-    , postListPosts  :: [Post]
+    { postListChannel :: TChan PostListEvent
+    , postListExpire  :: UTCTime
+    , postListPosts   :: [Post]
     }
+
+instance ToJSON PostList where
+    toJSON PostList {..} = object 
+        [ "expire" .= postListExpire
+        , "posts"  .= postListPosts
+        ]
 
 -- A HashMap mapping from Text keys to Post lists
 type PostMap = Map Text PostList

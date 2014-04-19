@@ -20,6 +20,7 @@ library
                      Settings.Development
                      Handler.Home
                      Handler.Wall
+                     Handler.Poll
                      Handler.Gc
                      State
 
@@ -42,6 +43,7 @@ library
                 EmptyDataDecls
                 NoMonomorphismRestriction
                 DeriveDataTypeable
+                RecordWildCards
 
     build-depends: base                          >= 4          && < 5
                  , yesod                         >= 1.2.5      && < 1.3
