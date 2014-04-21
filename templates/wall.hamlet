@@ -7,6 +7,7 @@
   ^{widget}
   <input type=submit value=Send>
 
-$forall post <- ps
-  <p class=post>
-    <span>#{postNick post}</span> #{postBody post}
+<div id=posts>
+  $forall post <- ps
+    <p class=post>
+      <span>#{postNick post}</span> #{postBody post}

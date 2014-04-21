@@ -38,14 +38,16 @@ data PostListEvent = EventNewPost
 
 data PostList = PostList
     { postListChannel :: TChan PostListEvent
+    , postListVersion :: Int
     , postListExpire  :: UTCTime
     , postListPosts   :: [Post]
     }
 
 instance ToJSON PostList where
     toJSON PostList {..} = object 
-        [ "expire" .= postListExpire
-        , "posts"  .= postListPosts
+        [ "version" .= postListVersion
+        , "expire"  .= postListExpire
+        , "posts"   .= postListPosts
         ]
 
 -- A HashMap mapping from Text keys to Post lists

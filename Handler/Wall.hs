@@ -38,7 +38,7 @@ getWallR key = do
     yesod <- getYesod
     ttl <- fmap extraTtl getExtra
 
-    PostList chan expire ps <- liftIO $ getPosts False (posts yesod) key ttl
+    PostList chan version expire ps <- liftIO $ getPosts (posts yesod) key ttl
 
     defaultLayout $ do
         $(widgetFile "wall")
@@ -58,7 +58,7 @@ postWallR key = do
 
             redirect (WallR key)
         FormFailure err -> do
-            PostList chan expire ps <- liftIO $ getPosts False (posts yesod) key ttl
+            PostList chan version expire ps <- liftIO $ getPosts (posts yesod) key ttl
             defaultLayout $ do
                 $(widgetFile "wall")
         FormMissing -> do
