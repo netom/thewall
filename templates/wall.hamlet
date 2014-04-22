@@ -1,11 +1,12 @@
-<h1>_{MsgHello}
+<div class="well">
+  <p>
+    This wall will expire at #{show expire}
 
-<small>
-  This wall will expire at #{show expire}
+  <div #qrcode>
 
 <form method=post enctype=#{enctype}>
   ^{widget}
-  <input type=submit value=Send>
+  <input type=submit value=Send .btn .btn-success .btn-send>
 
 <div id=posts>
   $forall post <- ps

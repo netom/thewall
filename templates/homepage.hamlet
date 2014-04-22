@@ -1,7 +1,50 @@
-<h1>_{MsgHello}
+<div class=header>
+  <ul class="nav nav-pills pull-right">
+    <li class=active>
+      <a href=#>Home
+    <li>
+      <a href="#">About
+    <li>
+      <a href="#">Contact
+  <h3 class="text-muted">The Wall
 
-<p>
-  Dear Visitor!
+<div class="jumbotron">
+  <h1>Hey You
+  <p class="lead">Dear Visitor! Here is your link to a new wall:
+  <p>
+    <a class="btn btn-xs btn-success" href="#" role="button" id="walllink"></a>
+    <div #qrcode>
 
-<p>
-  Here is your link to a new wall: <a id="walllink" href="#"></a>
+<div class="row marketing">
+  <div class="col-lg-6">
+    <h4>Instant. Messaging.
+    <p>
+      You don't have to install, or download anything. The Wall works on your PC or mobile device instantly.
+
+    <h4>Security.
+    <p>
+      The Wall uses strong encryption to make truly secret communication possible.
+
+    <h4>Privacy.
+    <p>
+      The Wall uses a simple, proven trick to keep your conversations safe.
+      Only those who know the URL can read and write to you Wall.
+
+  <div class="col-lg-6">
+    <h4>Simplicity.
+    <p>
+      Start a conversation without registering. Share the URL to invite others.
+
+    <h4>Keep it short.
+    <p>
+      A post must be at most 200 characters long, and a wall can only keep 100 posts. If
+      a new post arrives, and your Wall is already 100 posts long, the oldest one is deleted
+      to make room for it.
+
+    <h4>Off the record.
+    <p>
+      Walls are forgotten 24 hours past the last post. Nothing is saved on disks, everything
+      is lost on power or software failures, attacks, confiscations.
+
+  <h1>
+
