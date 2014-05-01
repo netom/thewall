@@ -4,7 +4,6 @@ TODO List
 1.0
 ---
 
-* Refactor the functions in State.hs, no C+P please.
 * Make the header MUCH smaller
 * Make the chat header collapsible
 * Refactor the post AForm into an MForm with proper structure, design
