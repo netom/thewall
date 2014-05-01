@@ -19,7 +19,7 @@ addPost tvpostmap key post ttl = do
                 modifyTVar tvpostmap (alter (\_ -> Just $ PostList chan 0 expires [post]) key)
                 return chan
             Just (PostList chan version _ ps) -> do
-                modifyTVar tvpostmap (alter (\_ -> Just $ PostList chan (version + 1) expires (post : ps)) key)
+                modifyTVar tvpostmap (alter (\_ -> Just $ PostList chan (version + 1) expires (post : take 99 ps)) key) --TODO: 100 to settings
                 return chan
 
     atomically $ writeTChan chan EventNewPost

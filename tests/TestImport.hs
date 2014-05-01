@@ -7,7 +7,7 @@ module TestImport
     ) where
 
 import Yesod.Test
-import Foundation
+import Foundation hiding (postBody)
 
 type Spec = YesodSpec App
 type Example = YesodExample App
