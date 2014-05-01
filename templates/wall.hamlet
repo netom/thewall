@@ -1,9 +1,3 @@
-<div class="well">
-  <p>
-    This wall will expire at #{show expire}
-
-  <div #qrcode>
-
 <form method=post enctype=#{enctype}>
   ^{widget}
   <input type=submit value=Send .btn .btn-success .btn-send>
@@ -12,3 +6,8 @@
   $forall post <- ps
     <p class=post>
       <span>#{postNick post}</span> #{postBody post}
+
+<div class="well">
+  <p>
+    <div #qrcode>
+    This wall will expire at #{show expire}

@@ -75,11 +75,14 @@ body {
 }
 
 #qrcode {
-  display: inline-block;
+  float: left;
+  margin-right: 5px;
 }
 
 .well {
-  text-align: center;
+  text-align: left;
+  padding: 10px;
+  height: 105px;
 }
 
 label {
