@@ -1,11 +1,4 @@
 <div class=header>
-  <ul class="nav nav-pills pull-right">
-    <li class=active>
-      <a href=#>Home
-    <li>
-      <a href="#">About
-    <li>
-      <a href="#">Contact
   <h3 class="text-muted">The Wall
 
 <div class="jumbotron">

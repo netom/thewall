@@ -75,6 +75,10 @@ body {
 }
 
 #qrcode {
+  display: inline-block;
+}
+
+.well #qrcode {
   float: left;
   margin-right: 5px;
 }
