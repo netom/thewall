@@ -1,11 +1,6 @@
 TODO List
 =========
 
-1.0b
-----
-
-* Add better expiration logic: make walls expire upon read / write ops.
-
 1.0
 ---
 
