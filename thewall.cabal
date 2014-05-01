@@ -100,4 +100,5 @@ test-suite test
                  , yesod
                  , hspec
                  , text
+                 , transformers
 

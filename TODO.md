@@ -4,11 +4,11 @@ TODO List
 1.0
 ---
 
-* Refactor the post AForm into an MForm with proper structure, design
 * Refactor the functions in State.hs, no C+P please.
-* Add non-obtrusive AJAX form posting
 * Make the header MUCH smaller
 * Make the chat header collapsible
+* Refactor the post AForm into an MForm with proper structure, design
+* Add non-obtrusive AJAX form posting
 * Generate random wall links at the server side
 * Generate QR codes at the server side
 

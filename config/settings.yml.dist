@@ -12,6 +12,8 @@ Development:
 Testing:
   <<: *defaults
   approot: "http://localhost:3000"
+  ttl: 10
+  syskey: testsyskey
 
 Staging:
   <<: *defaults
