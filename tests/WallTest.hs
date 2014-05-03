@@ -50,8 +50,8 @@ wallSpecs =
                 addPostParam "body" "Some post content"
 
             statusIs 200
-            htmlCount ".errors" 1
-            htmlAnyContain ".errors" "Nick must be at most 50 characters long."
+            htmlCount ".alert" 1
+            htmlAnyContain ".alert" "Nick must be at most 50 characters long."
 
         yit "Enforces post length limit" $ do
             get $ WallR "this-is-a-test-wall"
@@ -63,8 +63,8 @@ wallSpecs =
                 addPostParam "body" $ T.replicate 201 "a"
 
             statusIs 200
-            htmlCount ".errors" 1
-            htmlAnyContain ".errors" "Post must be at most 200 characters long."
+            htmlCount ".alert" 1
+            htmlAnyContain ".alert" "Post must be at most 200 characters long."
 
         yit "Only allows 100 entries" $ do
             forM_ ([1..105]::[Int]) $ \i -> do
