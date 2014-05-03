@@ -4,6 +4,7 @@ TODO List
 1.0
 ---
 
+* Timestamp posts
 * Refactor the post AForm into an MForm with proper structure, design
 * Add non-obtrusive AJAX form posting
 * Generate random wall links at the server side
