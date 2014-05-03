@@ -1,4 +1,11 @@
+ul {
+  list-style: none;
+}
 
-p.post span {
+.post span {
     font-weight: bold;
+}
+
+.wallfooter {
+  text-align: center;
 }

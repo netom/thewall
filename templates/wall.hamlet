@@ -2,9 +2,9 @@
   ^{widget}
   <input type=submit value=Send .btn .btn-success .btn-send>
 
-<div id=posts>
+<ul id=posts>
   $forall post <- ps
-    <p class=post>
+    <li class=post>
       <span>#{postNick post}</span> #{postBody post}
 
 <div class="footer wallfooter">
