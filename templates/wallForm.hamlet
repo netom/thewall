@@ -1,0 +1,14 @@
+#{extra}
+^{fvInput nickView}
+$case fvErrors nickView
+    $of Just error
+        <div .alert .alert-danger>
+            ^{error}
+    $of Nothing
+^{fvInput bodyView}
+$case fvErrors bodyView
+    $of Just error
+        <div .alert .alert-danger>
+            ^{error}
+    $of Nothing
+<input type=submit value=Send .btn .btn-success .btn-send>

@@ -9,3 +9,18 @@ ul {
 .wallfooter {
   text-align: center;
 }
+
+#nick, #body {
+  display: block;
+  width: 100%;
+  border: solid 1px #777777;
+  margin-bottom: 5px;
+}
+
+#body {
+  height: 70px;
+}
+
+input.btn {
+  margin-left: 0px;
+}

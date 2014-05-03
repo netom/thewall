@@ -1,7 +1,15 @@
 var version = #{toJSON version};
 
 $(document).ready(function () {
-    $('#hident3').focus();
+    var ta = $('#body');
+
+    ta.keydown(function(event) {
+        if (event.shiftKey && event.keyCode == 13) {
+            $(this.form).submit();
+            return false;
+        }
+    });
+    ta.focus();
 
     var qrcode = new QRCode("qrcode", {
         text: location.href,
@@ -21,12 +29,17 @@ function refreshWall() {
     $.get("/poll/" + #{toJSON key} + "/" + version, function(data) {
 
     var posts = data['posts'];
-    version = data['version'];
+    if (data['version']) {
+        //TODO broáf
+        version = data['version'];
+    } else {
+        return;
+    }
 
     postsel.html('');
     for (i in posts) {
         var post = posts[i];
-        postsel.html(postsel.html() + '<p class="post"><span>' + post['nick'] + '</span> ' + post['body'] + '</p>')
+        postsel.html(postsel.html() + '<li class="post"><span>' + post['nick'] + '</span> ' + post['body'] + '</li>')
     }
 
     }).always(function() {

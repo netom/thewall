@@ -20,7 +20,7 @@ wallSpecs =
         yit "Loads an empty wall" $ do
             get $ WallR "this-is-a-test-wall"
             statusIs 200
-            htmlAllContain ".container .well p" "This wall will expire at"
+            htmlAllContain ".wallfooter" "This wall will expire at"
 
         yit "Posts to a wall" $ do
             get $ WallR "this-is-a-test-wall"
@@ -28,8 +28,8 @@ wallSpecs =
                 setMethod "POST"
                 setUrl $ WallR "this-is-a-test-wall"
                 addNonce
-                byLabel "Nick" "tester"
-                byLabel "Post" "Some post content"
+                addPostParam "nick" "tester"
+                addPostParam "body" "Some post content"
 
             statusIs 302 -- We should follow the PRG pattern
             assertHeader "Location" "http://localhost:3000/wall/this-is-a-test-wall" -- TODO: use value from settings
@@ -46,8 +46,8 @@ wallSpecs =
                 setMethod "POST"
                 setUrl $ WallR "this-is-a-test-wall"
                 addNonce
-                byLabel "Nick" $ T.replicate 51 "a"
-                byLabel "Post" "Some post content"
+                addPostParam "nick" $ T.replicate 51 "a"
+                addPostParam "body" "Some post content"
 
             statusIs 200
             htmlCount ".errors" 1
@@ -59,8 +59,8 @@ wallSpecs =
                 setMethod "POST"
                 setUrl $ WallR "this-is-a-test-wall"
                 addNonce
-                byLabel "Nick" "tester"
-                byLabel "Post" $ T.replicate 201 "a"
+                addPostParam "nick" "tester"
+                addPostParam "body" $ T.replicate 201 "a"
 
             statusIs 200
             htmlCount ".errors" 1
@@ -73,8 +73,8 @@ wallSpecs =
                     setMethod "POST"
                     setUrl $ WallR "this-is-a-test-wall"
                     addNonce
-                    byLabel "Nick" "tester"
-                    byLabel "Post" $ T.pack $ show i
+                    addPostParam "nick" "tester"
+                    addPostParam "body" $ T.pack $ show i
                 statusIs 302
 
             get $ WallR "this-is-a-test-wall"
@@ -95,8 +95,8 @@ wallSpecs =
                 setMethod "POST"
                 setUrl $ WallR "this-is-a-test-wall-1"
                 addNonce
-                byLabel "Nick" "tester"
-                byLabel "Post" "Some post content 1"
+                addPostParam "nick" "tester"
+                addPostParam "body" "Some post content 1"
             statusIs 302
 
             -- Wait 5 seconds and post an other
@@ -107,8 +107,8 @@ wallSpecs =
                 setMethod "POST"
                 setUrl $ WallR "this-is-a-test-wall-2"
                 addNonce
-                byLabel "Nick" "tester"
-                byLabel "Post" "Some post content 2"
+                addPostParam "nick" "tester"
+                addPostParam "body" "Some post content 2"
             statusIs 302
 
             -- Wait 6 seconds, so the first wall will expire
@@ -133,4 +133,3 @@ wallSpecs =
             -- TODO
             -- We need to do a fork somehow here.
             -- Probably need a function to run a request in the background
-

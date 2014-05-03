@@ -1,6 +1,5 @@
 <form method=post enctype=#{enctype}>
   ^{widget}
-  <input type=submit value=Send .btn .btn-success .btn-send>
 
 <ul id=posts>
   $forall post <- ps

@@ -5,7 +5,6 @@ TODO List
 ---
 
 * Timestamp posts
-* Refactor the post AForm into an MForm with proper structure, design
 * Add non-obtrusive AJAX form posting
 * Generate random wall links at the server side
 * Generate QR codes at the server side
@@ -13,6 +12,7 @@ TODO List
 1.1
 ---
 
+* Hilite links
 * Make wall refresh to do exponential back-off
 * Wall refresh should return only the difference
 * Write a completely JS-free version using frames and browser-based refresh

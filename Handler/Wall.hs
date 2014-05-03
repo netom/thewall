@@ -4,10 +4,20 @@ import Import
 import State
 import Data.Text
 
+-- Build a FieldSettings according to our common pattern:
+-- id and name are the same, label is empty, and there is a placeholder text
+fsPIN :: Text -> Text -> FieldSettings master
+fsPIN name ph = FieldSettings "" Nothing (Just name) (Just name) [("placeholder", ph)]
+
+-- This form is used to post / process a message
 postForm :: Maybe Post -> Html -> MForm Handler (FormResult Post, Widget)
-postForm post = renderDivs $ Post
-    <$> areq nickField "Nick" (postNick <$> post)
-    <*> areq postField "Post" (postBody <$> post)
+postForm post extra = do
+    (nickRes, nickView) <- mreq nickField (fsPIN "nick" "choose a nickname") (postNick <$> post)
+    (bodyRes, bodyView) <- mreq postField (fsPIN "body" "type your message") (postBody <$> post)
+    let postRes = Post <$> nickRes <*> bodyRes
+    let widget = do
+        $(widgetFile "wallForm")
+    return (postRes, widget)
   where
     nickField = check validateNick textField
     postField = check validatePost textareaField
