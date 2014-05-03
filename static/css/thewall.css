@@ -78,15 +78,8 @@ body {
   display: inline-block;
 }
 
-.well #qrcode {
-  float: left;
-  margin-right: 5px;
-}
-
-.well {
-  text-align: left;
-  padding: 10px;
-  height: 105px;
+.wallfooter {
+  text-align: center;
 }
 
 label {

@@ -15,7 +15,7 @@ $newline never
     ^{pageHead pc}
 
     \<!--[if lt IE 9]>
-    \<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    \<script src="/static/html5.js"></script>
     \<![endif]-->
 
     <script>
@@ -24,12 +24,10 @@ $newline never
     <link rel=stylesheet href=/static/css/bootstrap.min.css>
     <link rel=stylesheet href=/static/css/bootstrap-theme.min.css>
     <link rel=stylesheet href=/static/css/thewall.css>
+
     <script src=/static/js/jquery-2.1.0.min.js>
     <script src=/static/js/bootstrap.min.js>
     <script src=/static/js/qrcode.min.js>
   <body>
     <div class=container>
       ^{pageBody pc}
-
-      <div class="footer">
-        <p>#{extraCopyright $ appExtra $ settings master}

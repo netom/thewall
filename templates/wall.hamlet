@@ -7,7 +7,6 @@
     <p class=post>
       <span>#{postNick post}</span> #{postBody post}
 
-<div class="well">
-  <p>
-    <div #qrcode>
-    This wall will expire at #{show expire}
+<div class="footer wallfooter">
+  <p>This wall will expire at #{show expire}<br/>
+  <div #qrcode>
