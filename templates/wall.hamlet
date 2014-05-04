@@ -4,8 +4,12 @@
 <ul id=posts>
   $forall post <- ps
     <li class=post>
-      <span>#{postNick post}</span> #{postBody post}
+      <span class=nick>#{postNick post}
+      <span class=time>#{show $ postTime post}
+      <br>
+      #{postBody post}
 
 <div class="footer wallfooter">
   <p>This wall will expire at #{show expire}<br/>
-  <div #qrcode>
+  <p>
+      <img .qrcode src="data:imgage/png;base64,#{qrpng}">

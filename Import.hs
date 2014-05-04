@@ -7,7 +7,8 @@ import           Prelude              as Import hiding (head, init, last,
 import           Yesod                as Import hiding (Route (..))
 
 import           Control.Applicative  as Import (pure, (<$>), (<*>))
-import           Data.Text            as Import (Text)
+import           Data.Text            as Import (Text, pack, unpack)
+import           Data.Text.Encoding   as Import (decodeUtf8)
 import           Control.Concurrent.STM as Import hiding (check)
 
 import           Foundation           as Import

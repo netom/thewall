@@ -74,6 +74,11 @@ library
                  , stm
                  , hashmap
                  , time
+                 , vector
+                 , JuicyPixels
+                 , haskell-qrencode
+                 , random
+                 , base64-bytestring
 
 executable         thewall
     if flag(library-only)

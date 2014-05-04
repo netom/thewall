@@ -11,15 +11,6 @@ $(document).ready(function () {
     });
     ta.focus();
 
-    var qrcode = new QRCode("qrcode", {
-        text: location.href,
-        width: 67,
-        height: 67,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.L
-    });
-
     setTimeout("refreshWall()", 1);
 });
 

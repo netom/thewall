@@ -20,7 +20,8 @@ import Data.Time
 
 -- Data type for storing posts
 data Post = Post
-    { postNick :: Text
+    { postTime :: UTCTime
+    , postNick :: Text
     , postBody :: Textarea
     }
 

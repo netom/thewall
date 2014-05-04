@@ -2,8 +2,12 @@ ul {
   list-style: none;
 }
 
-.post span {
+.post .nick {
     font-weight: bold;
+}
+
+.post .time {
+    font-style: italic;
 }
 
 .wallfooter {

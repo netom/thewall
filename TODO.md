@@ -4,10 +4,12 @@ TODO List
 1.0
 ---
 
-* Timestamp posts
 * Add non-obtrusive AJAX form posting
-* Generate random wall links at the server side
-* Generate QR codes at the server side
+* Improve tests to really test GC and new expiration logic separately
+* Try to figure out how to test javascript (hs-webdriver?)
+* Review the random string and QR-Code generating process
+** Improve efficiency. The link generations is naïve at best.
+** Review the types and reduce conversion overhead where needed and can be.
 
 1.1
 ---

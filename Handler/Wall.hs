@@ -3,6 +3,7 @@ module Handler.Wall where
 import Import
 import State
 import Data.Text
+import Data.Time
 
 -- Build a FieldSettings according to our common pattern:
 -- id and name are the same, label is empty, and there is a placeholder text
@@ -14,9 +15,14 @@ postForm :: Maybe Post -> Html -> MForm Handler (FormResult Post, Widget)
 postForm post extra = do
     (nickRes, nickView) <- mreq nickField (fsPIN "nick" "choose a nickname") (postNick <$> post)
     (bodyRes, bodyView) <- mreq postField (fsPIN "body" "type your message") (postBody <$> post)
-    let postRes = Post <$> nickRes <*> bodyRes
+
+    now <- liftIO getCurrentTime
+
+    let postRes = Post now <$> nickRes <*> bodyRes
+
     let widget = do
         $(widgetFile "wallForm")
+
     return (postRes, widget)
   where
     nickField = check validateNick textField
@@ -41,7 +47,7 @@ getWallR key = do
                    Nothing -> ""
                    Just nick -> nick
 
-    let post = Post formNick $ Textarea ""
+    let post = Post (UTCTime (ModifiedJulianDay 0) (secondsToDiffTime 0)) formNick (Textarea "")
 
     (widget, enctype) <- generateFormPost $ postForm $ Just post
 
@@ -49,6 +55,16 @@ getWallR key = do
     ttl <- fmap extraTtl getExtra
 
     PostList chan version expire ps <- liftIO $ getPosts (posts yesod) key ttl
+
+    -- TODO: refactor this into a separate function
+    renderfunc <- getUrlRender
+    aurl <- getCurrentRoute
+
+    let surl = case aurl of
+                   Just u -> renderfunc u
+                   Nothing -> ""
+
+    qrpng <- liftIO $ getQRPng $ unpack surl
 
     defaultLayout $ do
         $(widgetFile "wall")
@@ -60,9 +76,18 @@ postWallR key = do
     yesod <- getYesod
     ttl <- fmap extraTtl getExtra
 
+    renderfunc <- getUrlRender
+    aurl <- getCurrentRoute
+
+    let surl = case aurl of
+                   Just u -> renderfunc u
+                   Nothing -> ""
+
+    qrpng <- liftIO $ getQRPng $ unpack surl
+
     case result of
         FormSuccess post -> do
-            let Post nick _ = post
+            let Post _ nick _ = post
             setSession "nick" nick
             liftIO $ addPost (posts yesod) key post ttl
 
