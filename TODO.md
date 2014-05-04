@@ -4,12 +4,15 @@ TODO List
 1.0
 ---
 
+* Fix js wall look difference bug
 * Add non-obtrusive AJAX form posting
 * Improve tests to really test GC and new expiration logic separately
 * Try to figure out how to test javascript (hs-webdriver?)
 * Review the random string and QR-Code generating process
 ** Improve efficiency. The link generations is naïve at best.
 ** Review the types and reduce conversion overhead where needed and can be.
+** Look for a pure haskell implementation of QR encoding
+** Same for PNG
 
 1.1
 ---
