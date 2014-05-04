@@ -22,7 +22,12 @@ withPostlist tvpostmap key ttl fMissing fExists = do
         postmap <- readTVar tvpostmap
         case Data.HashMap.lookup key postmap of
             Nothing -> fMissing tvpostmap expires
-            Just postlist -> fExists tvpostmap expires postlist
+            Just postlist -> do
+                if postListExpire postlist >= now
+                    then
+                        fExists tvpostmap expires postlist
+                    else
+                        fMissing tvpostmap expires
 
 --
 
