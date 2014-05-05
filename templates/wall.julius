@@ -30,7 +30,12 @@ function refreshWall() {
     postsel.html('');
     for (i in posts) {
         var post = posts[i];
-        postsel.html(postsel.html() + '<li class="post"><span>' + post['nick'] + '</span> ' + post['body'] + '</li>')
+        postsel.html(
+            postsel.html() +
+            '<li class="post"><span class="nick">' + post['nick'] +
+            '</span> <span class="time">' + post['time'] +
+            '</span><br/>' + post['body'] + '</li>'
+        );
     }
 
     }).always(function() {

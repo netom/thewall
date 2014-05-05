@@ -4,7 +4,6 @@ TODO List
 1.0
 ---
 
-* Fix js wall look difference bug
 * Add non-obtrusive AJAX form posting
 * Improve tests to really test GC and new expiration logic separately
 * Try to figure out how to test javascript (hs-webdriver?)
