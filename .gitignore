@@ -11,3 +11,5 @@ yesod-devel/
 .cabal-sandbox
 cabal.sandbox.config
 config/settings.yml
+.DS_Store
+*.swp

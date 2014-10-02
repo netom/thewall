@@ -74,4 +74,3 @@ parseExtra _ o = Extra
     <*> o .:? "analytics"
     <*> o .: "syskey"
     <*> o .: "ttl"
-

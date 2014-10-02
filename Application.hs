@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
+{-#  Language ViewPatterns #-}
 module Application
     ( makeApplication
     , getApplicationDev
@@ -13,8 +14,7 @@ import Network.Wai.Middleware.RequestLogger
     ( mkRequestLogger, outputFormat, OutputFormat (..), IPAddrSource (..), destination
     )
 import qualified Network.Wai.Middleware.RequestLogger as RequestLogger
-import Network.HTTP.Conduit (newManager, conduitManagerSettings)
-import Control.Concurrent (forkIO, threadDelay)
+import Network.HTTP.Client.Conduit (newManager)
 import System.Log.FastLogger (newStdoutLoggerSet, defaultBufSize)
 import Network.Wai.Logger (clockDateCacher)
 import Data.Default (def)
@@ -51,34 +51,30 @@ makeApplication conf = do
         }
 
     -- Create the WAI application and apply middlewares
-    app <- toWaiApp foundation
+    app <- toWaiAppPlain foundation
     let logFunc = messageLoggerSource foundation (appLogger foundation)
-    return (logWare app, logFunc)
+    return (logWare $ defaultMiddlewaresNoLogging app, logFunc)
 
 -- | Loads up any necessary settings, creates your foundation datatype, and
 -- performs some initialization.
 makeFoundation :: AppConfig DefaultEnv Extra -> IO App
 makeFoundation conf = do
-    manager <- newManager conduitManagerSettings
+    manager <- newManager
     s <- staticSite
 
     loggerSet' <- newStdoutLoggerSet defaultBufSize
-    (getter, updater) <- clockDateCacher
-
-    -- If the Yesod logger (as opposed to the request logger middleware) is
-    -- used less than once a second on average, you may prefer to omit this
-    -- thread and use "(updater >> getter)" in place of "getter" below.  That
-    -- would update the cache every time it is used, instead of every second.
-    let updateLoop = do
-            threadDelay 1000000
-            updater
-            updateLoop
-    _ <- forkIO updateLoop
+    (getter, _) <- clockDateCacher
 
     pl <- atomically $ newTVar empty
 
     let logger = Yesod.Core.Types.Logger loggerSet' getter
-        foundation = App conf s manager logger pl
+        foundation = App
+            { settings = conf
+            , getStatic = s
+            , httpManager = manager
+            , appLogger = logger
+            , posts = pl
+            }
 
     return foundation
 

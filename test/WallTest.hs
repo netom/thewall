@@ -31,7 +31,7 @@ wallSpecs =
                 addPostParam "nick" "tester"
                 addPostParam "body" "Some post content"
 
-            statusIs 302 -- We should follow the PRG pattern
+            statusIs 303 -- We should follow the PRG pattern
             assertHeader "Location" "http://localhost:3000/wall/this-is-a-test-wall" -- TODO: use value from settings
 
             get $ WallR "this-is-a-test-wall"
@@ -75,7 +75,7 @@ wallSpecs =
                     addNonce
                     addPostParam "nick" "tester"
                     addPostParam "body" $ T.pack $ show i
-                statusIs 302
+                statusIs 303
 
             get $ WallR "this-is-a-test-wall"
 
@@ -97,7 +97,7 @@ wallSpecs =
                 addNonce
                 addPostParam "nick" "tester"
                 addPostParam "body" "Some post content 1"
-            statusIs 302
+            statusIs 303
 
             -- Wait 5 seconds and post an other
             liftIO $ threadDelay 5000000
@@ -109,7 +109,7 @@ wallSpecs =
                 addNonce
                 addPostParam "nick" "tester"
                 addPostParam "body" "Some post content 2"
-            statusIs 302
+            statusIs 303
 
             -- Wait 6 seconds, so the first wall will expire
             liftIO $ threadDelay 6000000

@@ -1,3 +1,4 @@
+{-#  Language RecordWildCards,ViewPatterns #-}
 module Foundation where
 
 import Prelude
@@ -5,7 +6,7 @@ import Yesod
 import Yesod.Static
 import Yesod.Default.Config
 import Yesod.Default.Util (addStaticContentExternal)
-import Network.HTTP.Conduit (Manager)
+import Network.HTTP.Client.Conduit (Manager, HasHttpManager (getHttpManager))
 import qualified Settings
 import Settings.Development (development)
 import Settings.StaticFiles
@@ -67,6 +68,9 @@ data App = App
     , posts :: TVar PostMap
     }
 
+instance HasHttpManager App where
+    getHttpManager = httpManager
+
 -- Set up i18n messages. See the message folder.
 mkMessage "App" "messages" "en"
 
@@ -89,7 +93,7 @@ instance Yesod App where
     -- Store session data on the client in encrypted cookies,
     -- default session idle timeout is 120 minutes
     makeSessionBackend _ = fmap Just $ defaultClientSessionBackend
-        (120 * 60) -- 120 minutes
+        120    -- timeout in minutes
         "config/client_session_key.aes"
 
     defaultLayout widget = do
@@ -108,13 +112,19 @@ instance Yesod App where
                 , css_bootstrap_css
                 ])
             $(widgetFile "default-layout")
-        giveUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
+        withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
     -- This is done to provide an optimization for serving static files from
     -- a separate domain. Please see the staticRoot setting in Settings.hs
     urlRenderOverride y (StaticR s) =
         Just $ uncurry (joinPath y (Settings.staticRoot $ settings y)) $ renderRoute s
     urlRenderOverride _ _ = Nothing
+
+    -- Routes not requiring authenitcation.
+    isAuthorized FaviconR _ = return Authorized
+    isAuthorized RobotsR _ = return Authorized
+    -- Default to Authorized for now.
+    isAuthorized _ _ = return Authorized
 
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows
