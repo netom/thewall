@@ -1,0 +1,9 @@
+# Add to PATH: ./.cabal-sandbox/bin
+
+cabal sandbox init
+cabal install yesod-bin
+ln -s .cabal-sandbox/bin/yesod yesod
+./yesod init
+# Answer yesod's questions
+# mv everything from the project dir back one
+cabal install -j --enable-tests --max-backjumps=-1 --reorder-goals
