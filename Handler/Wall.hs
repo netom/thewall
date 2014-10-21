@@ -5,6 +5,8 @@ import State
 import Data.Text
 import Data.Time
 
+import qualified Data.Text as T
+
 -- Build a FieldSettings according to our common pattern:
 -- id and name are the same, label is empty, and there is a placeholder text
 fsPIN :: Text -> Text -> FieldSettings master
@@ -41,7 +43,18 @@ postForm post extra = do
 
 getWallR :: Text -> Handler Html
 getWallR key = do
-    maybeNick <- lookupSession "nick"
+    -- TODO: refactor this into a separate function
+    renderfunc <- getUrlRender
+    aurl <- getCurrentRoute
+
+    let surl = case aurl of
+                   Just u -> renderfunc u
+                   Nothing -> ""
+
+    qrpng <- liftIO $ getQRPng $ unpack surl
+    -- ---------------------------------------------
+
+    maybeNick <- lookupSession (T.concat ["nick", surl])
 
     let formNick = case maybeNick of
                    Nothing -> ""
@@ -56,6 +69,11 @@ getWallR key = do
 
     PostList chan version expire ps <- liftIO $ getPosts (posts yesod) key ttl
 
+    defaultLayout $ do
+        $(widgetFile "wall")
+
+postWallR :: Text -> Handler Html
+postWallR key = do
     -- TODO: refactor this into a separate function
     renderfunc <- getUrlRender
     aurl <- getCurrentRoute
@@ -65,30 +83,17 @@ getWallR key = do
                    Nothing -> ""
 
     qrpng <- liftIO $ getQRPng $ unpack surl
+    -- ---------------------------------------------
 
-    defaultLayout $ do
-        $(widgetFile "wall")
-
-postWallR :: Text -> Handler Html
-postWallR key = do
     ((result, widget), enctype) <- runFormPost $ postForm Nothing
 
     yesod <- getYesod
     ttl <- fmap extraTtl getExtra
 
-    renderfunc <- getUrlRender
-    aurl <- getCurrentRoute
-
-    let surl = case aurl of
-                   Just u -> renderfunc u
-                   Nothing -> ""
-
-    qrpng <- liftIO $ getQRPng $ unpack surl
-
     case result of
         FormSuccess post -> do
             let Post _ nick _ = post
-            setSession "nick" nick
+            setSession (T.concat ["nick", surl]) nick
             liftIO $ addPost (posts yesod) key post ttl
 
             redirect (WallR key)

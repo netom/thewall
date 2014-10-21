@@ -1,4 +1,4 @@
-function randomString() {
+/*function randomString() {
 	var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
 	var string_length = 32;
 	var randomstring = '';
@@ -25,4 +25,4 @@ $(document).ready(function(){
         correctLevel : QRCode.CorrectLevel.L
     });
 
-});
+});*/
