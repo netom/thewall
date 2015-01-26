@@ -91,9 +91,10 @@ instance Yesod App where
     approot = ApprootMaster $ appRoot . settings
 
     -- Store session data on the client in encrypted cookies,
-    -- default session idle timeout is 120 minutes
+    -- default session idle timeout is 120 minutes.
+    -- Here at the wall, we like our sessions to be long-lived.
     makeSessionBackend _ = fmap Just $ defaultClientSessionBackend
-        120    -- timeout in minutes
+        43200 -- timeout in minutes
         "config/client_session_key.aes"
 
     defaultLayout widget = do

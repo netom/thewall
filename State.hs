@@ -11,7 +11,7 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.Vector.Storable as V
 
 -- This function fetches a postlist for a key.
--- It either gots Nothing, of Just postlist.
+-- It either gots Nothing, or Just postlist.
 -- In the first case, the fMissing function is called with the postmap
 -- TVar.
 -- In the second case, fExists is called with the postmap TVar and the

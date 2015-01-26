@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="author" content="www.frebsite.nl" />
-		<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="www.frebsite.nl" />
+    <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 
-		<title>jQuery.mmenu demo</title>
+    <title>jQuery.mmenu demo</title>
 
-		<link type="text/css" rel="stylesheet" href="css/thewall.css" />
-		<link type="text/css" rel="stylesheet" href="css/jquery.mmenu.all.css" />
-    <!-- link type="text/css" rel="stylesheet" href="css/jquery.mmenu.themes.css" / -->
-		<link type="text/css" rel="stylesheet" href="css/jquery.mmenu.widescreen.css" media="all and (min-width: 900px)"/>
+    <link type="text/css" rel="stylesheet" href="css/thewall.css" />
+    <link type="text/css" rel="stylesheet" href="css/jquery.mmenu.all.css" />
+    <link type="text/css" rel="stylesheet" href="css/jquery.mmenu.widescreen.css" media="all and (min-width: 900px)"/>
 
-		<script type="text/javascript" src="js/jquery.js"></script>
-		<script type="text/javascript" src="js/jquery.mmenu.min.all.js"></script>
-	</head>
-	<body>
-		<div id="page">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.mmenu.min.all.js"></script>
+    <script type="text/javascript" src="js/filesaver.js"></script>
+    <script type="text/javascript" src="js/blob.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/jquery.storageapi.js"></script>
+    <script type="text/javascript" src="js/json2.js"></script>
+    <script type="text/javascript" src="js/thewall.js"></script>
+  </head>
+  <body>
+    <div id="page">
 
-			<div class="header">
-				<a href="#menu"></a>
-				TheWall
-			</div>
+      <div class="header">
+        <a href="#menu"></a>
+        TheWall
+      </div>
 
-			<div class="content">
+      <div class="content">
+        <input type="file" id="fileinput" />
         <h4>Instant. Messaging.</h4>
         <p>
           You don't have to install, or download anything. The Wall works on your PC or mobile device instantly.
@@ -57,38 +63,24 @@
           Walls are forgotten 24 hours past the last post. Nothing is saved on disks, everything
           is lost on power or software failures, attacks, confiscations.
         </p>
-			</div>
+      </div>
 
-			<nav id="menu">
-				<ul>
-					<li class="home" id="home"><a href="#"><img src="img/wireframe_mono/blacks/16x16/home.png"/> Home</a></li>
-          <li class="wall"><a href="#wall_Zg9mDA1IXmPejy3KmANf7oq3Cj0ouqEa"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/><strong> Tibi (Zg9mDA1IXmPejy3KmANf7oq3Cj0ouqEa)</strong></a></li>
-          <li class="wall"><a href="#wall_DHGNCCFHF7EhuYwhcYb45WsYko7inE2T"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> Zoli (DHGNCCFHF7EhuYwhcYb45WsYko7inE2T)</a></li>
-          <li class="wall"><a href="#wall_KKu1NVgkBc0kHd3IEZGNl83duQNllhcQ"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> Mari (KKu1NVgkBc0kHd3IEZGNl83duQNllhcQ)</a></li>
-          <li class="nowalls"><a href="#">(you have no walls yet)</a></li>
-          <li class="" id="addnew"><a href="#walls/addnew"><img src="img/wireframe_mono/blacks/16x16/sq_plus.png"/> Add new</a></li>
-          <li id="addkey"><a href="#walls/addkey"><img src="img/wireframe_mono/blacks/16x16/key.png" /> Add key</a></li>
-          <li id="export"><a href="#walls/export"><img src="img/wireframe_mono/blacks/16x16/doc_export.png" /> Export</a></li>
-          <li id="import"><a href="#walls/import"><img src="img/wireframe_mono/blacks/16x16/doc_import.png" /> Import</a></li>
-				</ul>
-        <p>
-          And now, for something completely different.
-        </p>
-			</nav>
+      <nav id="menu">
+        <ul>
+          <li class="home" id="home"><a href="#"><img src="img/wireframe_mono/blacks/16x16/home.png"/> Home</a></li>
+            <li class="wall"><a href="#wallZg9mDA1IXmPejy3KmANf7oq3Cj0ouqEa"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/><strong> Tibi (Zg9mDA1IXmPejy3KmANf7oq3Cj0ouqEa)</strong></a></li>
+            <li class="wall"><a href="#wallDHGNCCFHF7EhuYwhcYb45WsYko7inE2T"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> Zoli (DHGNCCFHF7EhuYwhcYb45WsYko7inE2T)</a></li>
+            <li class="wall"><a href="#wallKKu1NVgkBc0kHd3IEZGNl83duQNllhcQ"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> Mari (KKu1NVgkBc0kHd3IEZGNl83duQNllhcQ)</a></li>
+            <li class="nowalls"><a href="#">(you have no walls yet)</a></li>
+            <li class="" id="addnew"><a href="#walls/addnew"><img src="img/wireframe_mono/blacks/16x16/sq_plus.png"/> Add new</a></li>
+            <li id="addkey"><a href="#walls/addkey"><img src="img/wireframe_mono/blacks/16x16/key.png" /> Add key</a></li>
+            <li id="export"><a href="#walls/export"><img src="img/wireframe_mono/blacks/16x16/doc_export.png" /> Export</a></li>
+            <li id="import"><a href="#walls/import"><img src="img/wireframe_mono/blacks/16x16/doc_import.png" /> Import</a></li>
+        </ul>
+      </nav>
 
-		</div>
-  <script type="text/javascript">
-    $(function() {
-      $('nav#menu').mmenu({
-        classes: "mm-light"
-      });
-      $("li#addnew")
-        .on( "click", function(e) {
-          prompt( "The menu has just been selected.");
-          e.stopPropagation();
-          e.preventDefault();
-        });
-    });
-  </script>
-	</body>
+    </div>
+  </body>
 </html>
+
+<!-- vim: set tabstop=2:softtabstop=2:shiftwidth=2:expandtab -->
