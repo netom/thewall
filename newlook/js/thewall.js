@@ -1,3 +1,9 @@
+/*
+ * Returns a constructor.
+ * 
+ * The parameter is an object whose properties are
+ * copied into the constructor's prototype.
+ * */
 var Builder = function(body) {
   var constructor = function() {    
       this.init.apply(this, arguments);          
@@ -12,6 +18,39 @@ var Builder = function(body) {
   return constructor;    
 }
 
+var Wall = Builder({
+  init: function(key, title, count) {
+    this.key = key;
+    this.title = title;
+    this.count = count;
+  },
+
+  getKey: function() {
+    return this.key;
+  },
+
+  getTitle: function() {
+    return this.title;
+  },
+
+  setTitle: function(title) {
+    this.title = title;
+  },
+
+  getCount: function() {
+    return this.count;
+  },
+
+  setCount: function(count) {
+    this.count = count;
+  }
+});
+
+/*
+ * Local storage
+ * 
+ * Either by "true" local storage, session storage, or cookies.
+ * */
 var WallStorage = Builder({
   init: function() {
     this.storage = $.initNamespaceStorage('thewall').localStorage;
@@ -23,41 +62,65 @@ var WallStorage = Builder({
     }
   },
 
-  getWalls: function() {
+  getAll: function() {
     var walls = this.storage.get('walls');
 
     if (!walls) {
-      walls = [];
-      this.setWalls(walls);
+      this.setWalls([]);
     }
 
-    return walls;
+    var ret = [];
+
+    for (var i in walls) {
+      // Turn plain JSON objects into Wall objects
+      ret.push(new Wall(walls[i].key, walls[i].title, walls[i].count));
+    }
+
+    return ret;
   },
 
-  setWalls: function(walls) {
+  setAll: function(walls) {
     this.storage.set('walls', walls);
   },
 
-  addWall: function(wall) {
-    this.storage.set('walls', this.storage.get('walls').concat([wall]));
-  },
+  add: function(wall) {
+    var walls = this.getAll();
 
-  removeWall: function(wall) {
-    var newWalls = [];
-
-    for (var w in this.getWalls()) {
-      if (w != wall) {
-        newWalls.push(w);
+    for (i in walls) {
+      if (walls[i].getKey() == wall.getKey()) {
+        return;
       }
     }
 
-    this.setWalls(newWalls);
+    walls.push(wall);
+
+    this.storage.set('walls', walls); // TODO: do we need this?
+  },
+
+  remove: function(wall) {
+    var walls = this.getAll();
+    var newWalls = [];
+
+    for (var i in walls) {
+      if (walls[i].getKey() != wall.getKey()) {
+        newWalls.push(walls[i]);
+      }
+    }
+
+    this.setAll(newWalls);
   }
 
 });
 
+/*
+ * Menu handling
+ * */
 var WallMenu = Builder({
-  init: function(self) {
+  init: function(storage) {
+    this.storage = storage;
+
+    var self = this;
+
     $(function() {
       var navmenu = $('nav#menu');
 
@@ -65,12 +128,45 @@ var WallMenu = Builder({
         classes: "mm-light"
       });
 
-      $("li#addnew").on( "click", function(e) {
+      $("#addnew").on( "click", function(e) {
         prompt( "The menu has just been selected.");
         e.stopPropagation();
         e.preventDefault();
       });
+
+      self.loadMenu();
+
     });
+
+  },
+
+  loadMenu: function() {
+    var walls = this.storage.getAll();
+    for (var i in walls) {
+      this.add(walls[i]);
+    }
+  },
+
+  /*
+   * Add a new wall link to the menu
+   * */
+  add: function(wall) {
+    this.storage.add(wall);
+
+    var html = '<li class="wall"><a href="#' + wall.getKey() + '"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> ';
+    if (wall.getCount() > 0) {
+      html += '<strong>' + wall.getTitle() + ' (Zg9mDA1IXmPejy3KmANf7oq3Cj0ouqEa)</strong>' + wall.getCount() + '</a></li>';
+    } else {
+      html += wall.getTitle() + ' (' + wall.getKey() + ') ' + wall.getCount() + '</a></li>';
+    }
+
+    var nowalls = $('#nowalls');
+
+    nowalls.hide();
+    nowalls.after(html);
+  },
+
+  remove: function(key) {
   },
 
   onWallLink: function (listener) {
