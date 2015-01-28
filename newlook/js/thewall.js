@@ -153,20 +153,27 @@ var WallMenu = Builder({
   add: function(wall) {
     this.storage.add(wall);
 
-    var html = '<li class="wall"><a href="#' + wall.getKey() + '"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> ';
+    var html = '<li class="wall" id="' + wall.getKey() + '"><a href="#' + wall.getKey() + '"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> ';
     if (wall.getCount() > 0) {
-      html += '<strong>' + wall.getTitle() + ' (Zg9mDA1IXmPejy3KmANf7oq3Cj0ouqEa)</strong>' + wall.getCount() + '</a></li>';
+      html += '<strong>' + wall.getTitle() + ' (Zg9mDA1IXmPejy3KmANf7oq3Cj0ouqEa)</strong>' + wall.getCount();
     } else {
-      html += wall.getTitle() + ' (' + wall.getKey() + ') ' + wall.getCount() + '</a></li>';
+      html += wall.getTitle() + ' (' + wall.getKey() + ') ' + wall.getCount();
     }
+    html += '<img src="img/wireframe_mono/blacks/16x16/delete.png" style="position:absolute;right:10px" /></a></li>\n'
 
     var nowalls = $('#nowalls');
 
     nowalls.hide();
     nowalls.after(html);
+
+    $('#' + wall.getKey()).click(function(e) {
+        console.log(e);
+        console.log(this);
+    });
   },
 
   remove: function(key) {
+      $('#' + key).remove();
   },
 
   onWallLink: function (listener) {
@@ -245,6 +252,17 @@ var WallApp = Builder({
     this.menu.onAddNew(this.addNew);
     this.menu.onAddKey(this.addKey);
     this.menu.onRemove(this.remove);
+  },
+
+  randomKey: function()
+  {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+      for( var i=0; i < 5; i++ )
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
   },
 
   wallLinkClicked: function() {
