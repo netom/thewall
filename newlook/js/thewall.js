@@ -86,7 +86,7 @@ var WallStorage = Builder({
   add: function(wall) {
     var walls = this.getAll();
 
-    for (i in walls) {
+    for (var i in walls) {
       if (walls[i].getKey() == wall.getKey()) {
         return;
       }
@@ -97,12 +97,12 @@ var WallStorage = Builder({
     this.storage.set('walls', walls); // TODO: do we need this?
   },
 
-  remove: function(wall) {
+  remove: function(key) {
     var walls = this.getAll();
     var newWalls = [];
-
+    
     for (var i in walls) {
-      if (walls[i].getKey() != wall.getKey()) {
+      if (walls[i].getKey() != key) {
         newWalls.push(walls[i]);
       }
     }
@@ -116,10 +116,23 @@ var WallStorage = Builder({
  * Menu handling
  * */
 var WallMenu = Builder({
-  init: function(storage) {
+  _addListeners: [],
+  _removeListeners: [],
+  _wallLinkListeners: [],
+  _walls: {},
+
+  init: function(storage, imp, exp) {
     this.storage = storage;
+    this.import = imp;
+    this.export = exp;
 
     var self = this;
+
+    this.import.onImport(function(contents) {
+      for (var i in contents) {
+        self.add(contents[i]);
+      }
+    });
 
     $(function() {
       var navmenu = $('nav#menu');
@@ -128,16 +141,64 @@ var WallMenu = Builder({
         classes: "mm-light"
       });
 
-      $("#addnew").on( "click", function(e) {
-        prompt( "The menu has just been selected.");
+      $("#nowalls").on( "click", function(e) {
         e.stopPropagation();
         e.preventDefault();
+        self.add(new Wall(self.randomKey(), 'untitled', 0));
+      });
+
+      $("#addnew").on( "click", function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        self.add(new Wall(self.randomKey(), 'untitled', 0));
+      });
+
+      $("#addkey").on( "click", function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var key = prompt('Enter a wall key');
+        if (key !== null) {
+            self.add(new Wall(key, 'untitled', 0));
+        }
+      });
+
+      $("#export").on( "click", function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        self.export.export(JSON.stringify(self.storage.getAll()));
+      });
+
+      $("#import").on( "click", function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+      });
+
+      $("#delall").on( "click", function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (confirm('Sure?')) {
+          for (var key in self._walls) {
+            self.remove(key);
+          }
+        }
       });
 
       self.loadMenu();
 
     });
 
+  },
+
+  randomKey: function()
+  {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i = 0; i < 32; i++ ) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    return text;
   },
 
   loadMenu: function() {
@@ -152,12 +213,13 @@ var WallMenu = Builder({
    * */
   add: function(wall) {
     this.storage.add(wall);
+    this._walls[wall.getKey()] = wall;
 
-    var html = '<li class="wall" id="' + wall.getKey() + '"><a href="#' + wall.getKey() + '"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> ';
+    var html = '<li class="wall" id="' + wall.getKey() + '"><a href="#' + wall.getKey() + '"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> ' + wall.getCount() + ' ';
     if (wall.getCount() > 0) {
-      html += '<strong>' + wall.getTitle() + ' (Zg9mDA1IXmPejy3KmANf7oq3Cj0ouqEa)</strong>' + wall.getCount();
+      html += '<strong>' + wall.getTitle() + ' (Zg9mDA1IXmPejy3KmANf7oq3Cj0ouqEa)</strong>';
     } else {
-      html += wall.getTitle() + ' (' + wall.getKey() + ') ' + wall.getCount();
+      html += wall.getTitle() + ' (' + wall.getKey() + ') ';
     }
     html += '<img src="img/wireframe_mono/blacks/16x16/delete.png" style="position:absolute;right:10px" /></a></li>\n'
 
@@ -166,37 +228,77 @@ var WallMenu = Builder({
     nowalls.hide();
     nowalls.after(html);
 
+    var self = this;
+
     $('#' + wall.getKey()).click(function(e) {
-        console.log(e);
-        console.log(this);
+        e.preventDefault();
+        e.stopPropagation();
+
+        var thisS = $(this);
+        var clickDistanceFromRight = thisS.width() - e.pageX + thisS.position().left;
+
+        if (clickDistanceFromRight < 35) {
+            if (confirm('Sure?')) {
+                self.remove(wall.getKey());
+            }
+        } else {
+            self._onWallLink(wall);
+        }
     });
+
+    this._onAdd(wall);
+  },
+
+  _onAdd: function(key) {
+      for (var i in this._removeListeners) {
+        this._addListeners[i](key);
+      }
+  },
+
+  onAdd: function (listener) {
+    this._addListeners.push(listener);
   },
 
   remove: function(key) {
       $('#' + key).remove();
+      this.storage.remove(key);
+      this._onRemove(this._walls[key]);
+      delete this._walls[key];
+      if (Object.keys(this._walls).length == 0) {
+        $('#nowalls').show();
+      }
   },
 
-  onWallLink: function (listener) {
-  },
-
-  onAddNew: function (listener) {
-  },
-
-  onAddKey: function (listener) {
+  _onRemove: function (wall) {
+      for (var i in this._removeListeners) {
+        this._removeListeners[i](wall);
+      }
   },
 
   onRemove: function (listener) {
-  }
+    this._removeListeners.push(listener);
+  },
 
+  _onWallLink: function (wall) {
+    for (var i in this._wallLinkListeners) {
+      this._wallLinkListeners[i](wall);
+    }
+  },
+
+  onWallLink: function (listener) {
+    this._wallLinkListeners.push(listener);
+  }
 });
 
 var WallImport = Builder({
-  init: function(self) {
+  _importListeners: [],
+
+  init: function() {
     if (FileReader)
     {
       var self = this;
       $(function() {
-        document.getElementById('fileinput').addEventListener('change', self.readImportFile, false);
+        $('#fileinput').change(self._getFileChangeHandler());
       });
     }
   },
@@ -204,32 +306,56 @@ var WallImport = Builder({
   /* 
    * Reads a file with data to import
    * */
-  readImportFile: function(evt) {
-    //Retrieve the first (and only!) File from the FileList object
-    var f = evt.target.files[0]; 
+  _getFileChangeHandler: function() {
+    var self = this;
 
-    if (f) {
-      var r = new FileReader();
-      r.onload = function(e) { 
-          var contents = e.target.result;
-        alert( "Got the file.n" 
-              +"name: " + f.name + "\n"
-              +"type: " + f.type + "\n"
-              +"size: " + f.size + " bytes\n"
-              + "starts with: " + contents.substr(0, contents.indexOf("\n"))
-        );  
+    return function(evt) {
+      var f = evt.target.files[0];
+
+      if (!f) {
+        alert('Could not read import file');
+        return;
       }
+
+      var r = new FileReader();
+
+      r.onload = function(e) {
+        try {
+          var contents = JSON.parse(e.target.result);
+          console.log(self);
+          var walls = [];
+          for (var i in contents) {
+            walls.push(new Wall(contents[i].key, contents[i].title, contents[i].count));
+          }
+          self._onImport(walls);
+        } catch (e) {
+          alert('The file contents could not be interpreted' );
+          return;
+        }
+      };
+
       r.readAsText(f);
-    } else { 
-      alert("Failed to load file");
     }
   },
+
+  _onImport: function(contents) {
+    for( var i in this._importListeners) {
+      this._importListeners[i](contents);
+    }
+  },
+
+  onImport: function(listener) {
+    this._importListeners.push(listener);
+  }
 });
 
 var WallExport = Builder({
-  init: function(self) {
-    //var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
-    //saveAs(blob, "hello world.txt");
+  init: function(storage) {
+  },
+
+  export: function(object) {
+    var blob = new Blob([JSON.stringify(object)], {type: "application/json"});
+    saveAs(blob, "walls.json");
   }
 });
 
@@ -241,6 +367,7 @@ var WallBackend = Builder({
 var WallApp = Builder({
   init: function(self) {
     this.storage = new WallStorage();
+
     this.import = new WallImport();
     this.export = new WallExport();
 
@@ -249,34 +376,19 @@ var WallApp = Builder({
     this.backend = new WallBackend();
 
     this.menu.onWallLink(this.wallLinkClicked);
-    this.menu.onAddNew(this.addNew);
-    this.menu.onAddKey(this.addKey);
-    this.menu.onRemove(this.remove);
+    this.menu.onAdd(this.wallAdded);
+    this.menu.onRemove(this.wallRemoved);
   },
 
-  randomKey: function()
-  {
-      var text = "";
-      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-      for( var i=0; i < 5; i++ )
-          text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-      return text;
+  wallLinkClicked: function(wall) {
+    alert(wall.title);
   },
 
-  wallLinkClicked: function() {
-    // Swap in div
+  wallAdded: function(wall) {
   },
 
-  addNew: function() {
+  wallRemoved: function(wall) {
   },
-
-  addKey: function() {
-  },
-
-  remove: function() {
-  }
 });
 
 var wallApp = new WallApp();
