@@ -292,7 +292,7 @@ body {
   padding: 0;
   border: 0;
   outline: none;
-  background: #333333 url("/static/img/wireframe_mono/white/32x32/delete.png") left center no-repeat;
+  background: #333333 url("../img/wireframe_mono/white/32x32/delete.png") left center no-repeat;
   background-size: 1.875em 1.875em;
   overflow: hidden;
   white-space: nowrap;
@@ -302,7 +302,7 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .no-svg .close-btn {
-  background-image: url("/static/img/wireframe_mono/white/32x32/delete.png");
+  background-image: url("../img/wireframe_mono/white/32x32/delete.png");
 }
 .close-btn:focus, .close-btn:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
@@ -316,7 +316,7 @@ body {
   padding: 0;
   border: 0;
   outline: none;
-  background: #333333 url("/static/img/wireframe_mono/white/32x32/align_just.png") left center no-repeat;
+  background: #333333 url("../img/wireframe_mono/white/32x32/align_just.png") left center no-repeat;
   background-size: 1.875em 1.5em;
   overflow: hidden;
   white-space: nowrap;
@@ -326,7 +326,7 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .no-svg .nav-btn {
-  background-image: url("/static/img/wireframe_mono/white/32x32/align_just.png");
+  background-image: url("../img/wireframe_mono/white/32x32/align_just.png");
 }
 .nav-btn:hover, .nav-btn:focus {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
