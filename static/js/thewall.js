@@ -12,10 +12,38 @@ var Builder = function(body) {
   for (var property in body) { 
      constructor.prototype[property] = body[property];
   }
-        
+
   if (!constructor.prototype.init) constructor.prototype.init = function(){};      
-  
+
   return constructor;    
+}
+
+var trait = function(constructor, t) {
+  for (var i in t) {
+    constructor.prototype[i] = t[i];
+  }
+}
+
+var eventFul = {
+  _listeners: {},
+
+  trigger: function(eventName, eventParam) {
+    if (!this._listeners[eventName]) {
+      return;
+    }
+
+    for (var i in this._listeners[eventName]) {
+      this._listeners[eventName][i](eventParam);
+    }
+  },
+
+  on: function(eventName, listener) {
+    if (this._listeners[eventName]) {
+      this._listeners[eventName].push(listener);
+    } else {
+      this._listeners[eventName] = [listener];
+    }
+  }
 }
 
 var Wall = Builder({
@@ -66,7 +94,7 @@ var WallStorage = Builder({
     var walls = this.storage.get('walls');
 
     if (!walls) {
-      this.setWalls([]);
+      this.setAll([]);
     }
 
     var ret = [];
@@ -116,9 +144,6 @@ var WallStorage = Builder({
  * Menu handling
  * */
 var WallMenu = Builder({
-  _addListeners: [],
-  _removeListeners: [],
-  _wallLinkListeners: [],
   _walls: {},
 
   init: function(storage, imp, exp) {
@@ -128,7 +153,7 @@ var WallMenu = Builder({
 
     var self = this;
 
-    this.import.onImport(function(contents) {
+    this.import.on('import', function(contents) {
       for (var i in contents) {
         self.add(contents[i]);
       }
@@ -138,6 +163,11 @@ var WallMenu = Builder({
       var navmenu = $('nav#menu');
 
       navmenu.mmenu({
+        onClick: {
+           close: true,
+           preventDefault: false,
+           setSelected: true
+        },
         classes: "mm-light"
       });
 
@@ -165,12 +195,15 @@ var WallMenu = Builder({
       $("#export").on( "click", function(e) {
         e.stopPropagation();
         e.preventDefault();
-        self.export.export(JSON.stringify(self.storage.getAll()));
+        self.export.export(self.storage.getAll());
       });
 
-      $("#import").on( "click", function(e) {
-        e.stopPropagation();
-        e.preventDefault();
+      $("#import").on( "setSelected.mm", function(e) {
+        //self.trigger('importLink');
+      });
+
+      $("#homeitem").on( "setSelected.mm", function(e) {
+        self.trigger('homeLink');
       });
 
       $("#delall").on( "click", function(e) {
@@ -215,13 +248,13 @@ var WallMenu = Builder({
     this.storage.add(wall);
     this._walls[wall.getKey()] = wall;
 
-    var html = '<li class="wall" id="' + wall.getKey() + '"><a href="#' + wall.getKey() + '"><img src="img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> ' + wall.getCount() + ' ';
+    var html = '<li class="wallitem" id="item' + wall.getKey() + '"><a href="#_' + wall.getKey() + '"><img src="/static/img/wireframe_mono/blacks/16x16/spechbubble_2.png"/> ' + wall.getCount() + ' ';
     if (wall.getCount() > 0) {
       html += '<strong>' + wall.getTitle() + ' (Zg9mDA1IXmPejy3KmANf7oq3Cj0ouqEa)</strong>';
     } else {
       html += wall.getTitle() + ' (' + wall.getKey() + ') ';
     }
-    html += '<img src="img/wireframe_mono/blacks/16x16/delete.png" style="position:absolute;right:10px" /></a></li>\n'
+    html += '<img src="/static/img/wireframe_mono/blacks/16x16/delete.png" style="position:absolute;right:10px" /></a></li>\n'
 
     var nowalls = $('#nowalls');
 
@@ -230,65 +263,43 @@ var WallMenu = Builder({
 
     var self = this;
 
-    $('#' + wall.getKey()).click(function(e) {
+    $('#item' + wall.getKey()).click(function(e) {
+      var thisS = $(this);
+      var clickDistanceFromRight = thisS.width() - e.pageX + thisS.position().left;
+
+      if (clickDistanceFromRight < 35) {
         e.preventDefault();
         e.stopPropagation();
-
-        var thisS = $(this);
-        var clickDistanceFromRight = thisS.width() - e.pageX + thisS.position().left;
-
-        if (clickDistanceFromRight < 35) {
-            if (confirm('Sure?')) {
-                self.remove(wall.getKey());
-            }
-        } else {
-            self._onWallLink(wall);
+        if (confirm('Sure?')) {
+            self.remove(wall.getKey());
         }
+      } else {
+        //thisS.addClass('mm-selected');
+        self.trigger('wallLink', wall);
+      }
     });
 
-    this._onAdd(wall);
-  },
+    $('nav#menu').data('mmenu')._initAnchors();
 
-  _onAdd: function(key) {
-      for (var i in this._removeListeners) {
-        this._addListeners[i](key);
-      }
-  },
-
-  onAdd: function (listener) {
-    this._addListeners.push(listener);
+    this.trigger('add', wall);
   },
 
   remove: function(key) {
-      $('#' + key).remove();
+      $('#item' + key).remove();
+
       this.storage.remove(key);
-      this._onRemove(this._walls[key]);
+
       delete this._walls[key];
+
       if (Object.keys(this._walls).length == 0) {
         $('#nowalls').show();
       }
-  },
 
-  _onRemove: function (wall) {
-      for (var i in this._removeListeners) {
-        this._removeListeners[i](wall);
-      }
-  },
-
-  onRemove: function (listener) {
-    this._removeListeners.push(listener);
-  },
-
-  _onWallLink: function (wall) {
-    for (var i in this._wallLinkListeners) {
-      this._wallLinkListeners[i](wall);
-    }
-  },
-
-  onWallLink: function (listener) {
-    this._wallLinkListeners.push(listener);
+      this.trigger('remove', this._walls[key]);
   }
 });
+
+trait(WallMenu, eventFul);
 
 var WallImport = Builder({
   _importListeners: [],
@@ -322,12 +333,11 @@ var WallImport = Builder({
       r.onload = function(e) {
         try {
           var contents = JSON.parse(e.target.result);
-          console.log(self);
           var walls = [];
           for (var i in contents) {
             walls.push(new Wall(contents[i].key, contents[i].title, contents[i].count));
           }
-          self._onImport(walls);
+          self.trigger('import', walls);
         } catch (e) {
           alert('The file contents could not be interpreted' );
           return;
@@ -336,18 +346,10 @@ var WallImport = Builder({
 
       r.readAsText(f);
     }
-  },
-
-  _onImport: function(contents) {
-    for( var i in this._importListeners) {
-      this._importListeners[i](contents);
-    }
-  },
-
-  onImport: function(listener) {
-    this._importListeners.push(listener);
   }
 });
+
+trait(WallImport, eventFul);
 
 var WallExport = Builder({
   init: function(storage) {
@@ -375,22 +377,35 @@ var WallApp = Builder({
 
     this.backend = new WallBackend();
 
-    this.menu.onWallLink(this.wallLinkClicked);
-    this.menu.onAdd(this.wallAdded);
-    this.menu.onRemove(this.wallRemoved);
-  },
+    this.menu.on('wallLink', function (wall) {
+      $('.wallpage').hide();
+      $('#pagehome').hide();
+      $('#pageimport').hide();
+      $('#page' + wall.getKey()).show();
+    });
 
-  wallLinkClicked: function(wall) {
-    alert(wall.title);
-  },
+    this.menu.on('add', function (wall) {
+      var content = $('#content');
+      var html = '<div class="wallpage" id="page' + wall.getKey() + '">Wall page for: ' + wall.getKey() + '</div>';
+      content.append(html);
+    });
 
-  wallAdded: function(wall) {
-  },
+    this.menu.on('remove', function (wall) {
+      $('#page' + wall.getKey()).remove();
+    });
 
-  wallRemoved: function(wall) {
-  },
+    this.menu.on('homeLink', function () {
+      $('.wallpage').hide();
+      $('#pageimport').hide();
+      $('#pagehome').show();
+    });
+
+    this.menu.on('importLink', function () {
+      $('.wallpage').hide();
+      $('#pagehome').hide();
+      $('#pageimport').show();
+    });
+  }
 });
 
 var wallApp = new WallApp();
-
-/* vim: set tabstop=2:softtabstop=2:shiftwidth=2:expandtab */

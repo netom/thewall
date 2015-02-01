@@ -1,32 +1,59 @@
-$newline never
-\<!doctype html>
-<html class="no-js" lang="en">
+\<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name=viewport content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 
     <title>#{pageTitle pc}
 
-    ^{pageHead pc}
+    <link type=text/css rel=stylesheet href=/static/css/thewall.css>
+    <link type=text/css rel=stylesheet href=/static/css/jquery.mmenu.all.css>
+    <link type=text/css rel=stylesheet href=/static/css/jquery.mmenu.widescreen.css media="all and (min-width: 900px)">
 
-    \<!--[if lt IE 9]>
-    \<script src="/static/html5.js"></script>
-    \<![endif]-->
+    <script type=text/javascript src=/static/js/jquery.js>
+    <script type=text/javascript src=/static/js/jquery.mmenu.min.all.js>
+    <script type=text/javascript src=/static/js/filesaver.js>
+    <script type=text/javascript src=/static/js/blob.js>
+    <script type=text/javascript src=/static/js/jquery.cookie.js>
+    <script type=text/javascript src=/static/js/jquery.storageapi.js>
+    <script type=text/javascript src=/static/js/json2.js>
+    <script type=text/javascript src=/static/js/thewall.js>
 
-    <script>
-      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/,'js');
-
-    <link rel=stylesheet href=/static/css/bootstrap.min.css>
-    <link rel=stylesheet href=/static/css/bootstrap-theme.min.css>
-    <link rel=stylesheet href=/static/css/thewall.css>
-
-    <script src=/static/js/jquery-2.1.0.min.js>
-    <script src=/static/js/bootstrap.min.js>
   <body>
-    <div class=container>
-      ^{pageBody pc}
+    <div id="page">
+      <div class="header">
+        <a href="#menu">
+        TheWall
+
+      <nav id=menu>
+        <ul>
+          <li class="homeitem" id="homeitem">
+            <a href="#pagehome">
+              <img src="/static/img/wireframe_mono/blacks/16x16/home.png" />
+              \ Home
+          <li class="nowalls" id="nowalls">
+            <a href="#">
+              (you have no walls here)
+          <li class="" id="addnew">
+            <a href="#walls/addnew">
+              <img src="/static/img/wireframe_mono/blacks/16x16/sq_plus.png">
+              \ Add new
+          <li id="addkey">
+            <a href="#walls/addkey">
+              <img src="/static/img/wireframe_mono/blacks/16x16/key.png">
+              \ Add key
+          <li id="export">
+            <a href="#walls/export">
+              <img src="/static/img/wireframe_mono/blacks/16x16/doc_export.png">
+              \ Export
+          <li id="import">
+            <a href="#pageimport">
+              <img src="/static/img/wireframe_mono/blacks/16x16/doc_import.png">
+              \ Import
+          <li id="delall">
+            <a href="#walls/import">
+              <img src="/static/img/wireframe_mono/blacks/16x16/delete.png">
+              \ REMOVE EVERYTING
+
+      <div class="content" id="content">
+        ^{pageBody pc}

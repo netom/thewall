@@ -20,7 +20,6 @@ TODO List
 * Make wall refresh to do exponential back-off
 * Wall refresh should return only the difference
 * Write a completely JS-free version using frames and browser-based refresh
-* Figure out how to do proper TLS (w/o ngingx / openSSL, maybe warp-tls? toWaiApp?)
 
 1.2
 ---
