@@ -1,3 +1,7 @@
+/*window.onerror = function (msg, url, line, col, error) {
+  console.log(error);
+}*/
+
 window.TheWall = Ember.Application.create();
 
 TheWall.ApplicationAdapter = DS.FixtureAdapter.extend();

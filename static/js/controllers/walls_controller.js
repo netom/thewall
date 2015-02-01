@@ -1,2 +1,1 @@
-TheWall.WallsController = Ember.ArrayController.extend({
-});
+TheWall.WallsController = Ember.ArrayController.extend();

@@ -26,6 +26,15 @@
                 <a href="#">
                   <img src="/static/img/wireframe_mono/blacks/16x16/home.png" />
                   \ Home
+              \<script type="text/x-handlebars" data-template-name="walls">
+              \  {{#each wall in model}}
+              \    <li>
+              \      <a {{bind-attr href="wall.key"}}>
+              \        {{wall.title}}
+              \      </a>
+              \     </li>
+              \  {{/each}}
+              \</script>
               <li class=nowalls>
                 <a href="#">
                   (you have no walls here)
@@ -55,17 +64,19 @@
           <article class="block prose">
             ^{pageBody pc}
 
-    <script type=text/javascript src=/static/js/libs/modernizr.js></script>    <script type=text/javascript src=/static/js/libs/jquery-2.1.3.min.js>
+    <script type=text/javascript src=/static/js/libs/modernizr.js>
     <script type=text/javascript src=/static/js/libs/filesaver.js>
     <script type=text/javascript src=/static/js/libs/blob.js>
     <script type=text/javascript src=/static/js/libs/json2.js>
 
-    <script type=text/javascript src=/static/js/libs/handlebars-v2.0.0.js></script>
-    <script type=text/javascript src=/static/js/libs/ember.prod.js></script>
-    <script type=text/javascript src=/static/js/libs/ember-data.prod.js></script>
-    <script type=text/javascript src=/static/js/libs/localstorage_adapter.js></script>
-    <script type=text/javascript src=/static/js/application.js></script>
-    <script type=text/javascript src=/static/js/router.js></script>
-    <script type=text/javascript src=/static/js/models/wall.js></script>
-    <script type=text/javascript src=/static/js/models/post.js></script>
-    <script type=text/javascript src=/static/js/controllers/walls_controller.js></script>
+    <script type=text/javascript src=/static/js/libs/jquery-2.1.3.min.js>
+    <script type=text/javascript src=/static/js/libs/handlebars-v2.0.0.js>
+    <script type=text/javascript src=/static/js/libs/ember.prod.js>
+    <script type=text/javascript src=/static/js/libs/ember-data.prod.js>
+    <script type=text/javascript src=/static/js/libs/localstorage_adapter.js>
+    <script type=text/javascript src=/static/js/application.js>
+    <script type=text/javascript src=/static/js/router.js>
+    <script type=text/javascript src=/static/js/models/wall.js>
+    <script type=text/javascript src=/static/js/models/post.js>
+    <script type=text/javascript src=/static/js/controllers/walls_controller.js>
+    <script type=text/javascript src=/static/js/controllers/wall_controller.js>
