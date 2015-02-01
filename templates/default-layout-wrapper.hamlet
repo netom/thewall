@@ -2,58 +2,70 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name=viewport content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
 
     <title>#{pageTitle pc}
 
     <link type=text/css rel=stylesheet href=/static/css/thewall.css>
-    <link type=text/css rel=stylesheet href=/static/css/jquery.mmenu.all.css>
-    <link type=text/css rel=stylesheet href=/static/css/jquery.mmenu.widescreen.css media="all and (min-width: 900px)">
-
-    <script type=text/javascript src=/static/js/jquery.js>
-    <script type=text/javascript src=/static/js/jquery.mmenu.min.all.js>
-    <script type=text/javascript src=/static/js/filesaver.js>
-    <script type=text/javascript src=/static/js/blob.js>
-    <script type=text/javascript src=/static/js/jquery.cookie.js>
-    <script type=text/javascript src=/static/js/jquery.storageapi.js>
-    <script type=text/javascript src=/static/js/json2.js>
-    <script type=text/javascript src=/static/js/thewall.js>
-
   <body>
-    <div id="page">
-      <div class="header">
-        <a href="#menu">
-        TheWall
+    <div id="outer-wrap">
+      <div id="inner-wrap">
 
-      <nav id=menu>
-        <ul>
-          <li class="homeitem" id="homeitem">
-            <a href="#pagehome">
-              <img src="/static/img/wireframe_mono/blacks/16x16/home.png" />
-              \ Home
-          <li class="nowalls" id="nowalls">
-            <a href="#">
-              (you have no walls here)
-          <li class="" id="addnew">
-            <a href="#walls/addnew">
-              <img src="/static/img/wireframe_mono/blacks/16x16/sq_plus.png">
-              \ Add new
-          <li id="addkey">
-            <a href="#walls/addkey">
-              <img src="/static/img/wireframe_mono/blacks/16x16/key.png">
-              \ Add key
-          <li id="export">
-            <a href="#walls/export">
-              <img src="/static/img/wireframe_mono/blacks/16x16/doc_export.png">
-              \ Export
-          <li id="import">
-            <a href="#pageimport">
-              <img src="/static/img/wireframe_mono/blacks/16x16/doc_import.png">
-              \ Import
-          <li id="delall">
-            <a href="#walls/import">
-              <img src="/static/img/wireframe_mono/blacks/16x16/delete.png">
-              \ REMOVE EVERYTING
+        <header id=top role=banner>
+            <div class="block">
+                <h1 class="block-title">The Wall
+                <a class="nav-btn" id="nav-open-btn" href="#nav">Book Navigation
 
-      <div class="content" id="content">
-        ^{pageBody pc}
+        <nav id=nav role=navigation>
+          <div class=block>
+            <h2 class=block-title>
+            <ul>
+              <li class=is-active>
+                <a href="#">
+                  <img src="/static/img/wireframe_mono/blacks/16x16/home.png" />
+                  \ Home
+              <li class=nowalls>
+                <a href="#">
+                  (you have no walls here)
+              <li class="">
+                <a href="#/addnew">
+                  <img src="/static/img/wireframe_mono/blacks/16x16/sq_plus.png">
+                  \ Add new
+              <li id="addkey">
+                <a href="#/addkey">
+                  <img src="/static/img/wireframe_mono/blacks/16x16/key.png">
+                  \ Add key
+              <li id="export">
+                <a href="#/export">
+                  <img src="/static/img/wireframe_mono/blacks/16x16/doc_export.png">
+                  \ Export
+              <li id="import">
+                <a href="#/pageimport">
+                  <img src="/static/img/wireframe_mono/blacks/16x16/doc_import.png">
+                  \ Import
+              <li id="delall">
+                <a href="#/delete-all">
+                  <img src="/static/img/wireframe_mono/blacks/16x16/delete.png">
+                  \ REMOVE EVERYTING
+            <a class=close-btn id=nav-close-btn href=#top>Return to Content
+
+        <div id=main role=main>
+          <article class="block prose">
+            ^{pageBody pc}
+
+    <script type=text/javascript src=/static/js/libs/modernizr.js></script>    <script type=text/javascript src=/static/js/libs/jquery-2.1.3.min.js>
+    <script type=text/javascript src=/static/js/libs/filesaver.js>
+    <script type=text/javascript src=/static/js/libs/blob.js>
+    <script type=text/javascript src=/static/js/libs/json2.js>
+
+    <script type=text/javascript src=/static/js/libs/handlebars-v2.0.0.js></script>
+    <script type=text/javascript src=/static/js/libs/ember.prod.js></script>
+    <script type=text/javascript src=/static/js/libs/ember-data.prod.js></script>
+    <script type=text/javascript src=/static/js/libs/localstorage_adapter.js></script>
+    <script type=text/javascript src=/static/js/application.js></script>
+    <script type=text/javascript src=/static/js/router.js></script>
+    <script type=text/javascript src=/static/js/models/wall.js></script>
+    <script type=text/javascript src=/static/js/models/post.js></script>
+    <script type=text/javascript src=/static/js/controllers/walls_controller.js></script>
