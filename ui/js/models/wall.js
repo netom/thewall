@@ -8,16 +8,16 @@ TheWall.Wall.FIXTURES = [
  {
    id: 1,
    title: 'Tibi',
-   key: ''
+   key: '298tfh29t29r929f2fr9hr3g'
  },
  {
    id: 2,
    title: 'Imre',
-   key: ''
+   key: '134tz45zhgf4tz54wgq34t4wtr'
  },
  {
    id: 3,
    title: 'Mókus',
-   key: ''
+   key: 'q35grbe6uj75uh3qhtfgq35z'
  }
 ];

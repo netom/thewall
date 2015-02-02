@@ -2,107 +2,94 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Welcome To The Wall!</title>
-    <link type="text/css" rel="stylesheet" href="css/thewall.css">
+    <title>The Wall</title>
+    <link rel="stylesheet" href="css/thewall.css" />
   </head>
   <body>
-   <script type="text/x-handlebars" data-template-name="walls">
-      <div id="outer-wrap">
-        <div id="inner-wrap">
-          <header id="top" role="banner">
-            <div class="block">
-              <h1 class="block-title">The Wall</h1>
-              <a class="nav-btn" id="nav-open-btn" href="#nav">Book Navigation</a>
-            </div>
-          </header>
-          <nav id="nav" role="navigation">
-            <div class="block">
-              <h2 class="block-title">The Wall</h2>
-              <ul>
-                <li class="is-active">
-                  <a href="#">
-                    <img src="img/wireframe_mono/blacks/16x16/home.png" />
-                    Home
-                  </a>
-                </li>
-                {{#each wall in model}}
-                  <li>
-                    <a {{bind-attr href="wall.key"}}>
-                      {{wall.title}}
-                    </a>
-                  </li>
-                {{/each}}
-                <li class="nowalls">
-                  <a href="#">
-                    (you have no walls here)
-                  </a>
-                </li>
-                <li class="">
-                  <a href="#/addnew">
-                    <img src="img/wireframe_mono/blacks/16x16/sq_plus.png" />
-                    Add new
-                  </a>
-                </li>
-                <li id="addkey">
-                  <a href="#/addkey">
-                    <img src="img/wireframe_mono/blacks/16x16/key.png" />
-                    Add key
-                  </a>
-                </li>
-                <li id="export">
-                  <a href="#/export">
-                    <img src="img/wireframe_mono/blacks/16x16/doc_export.png" />
-                    Export
-                  </a>
-                </li>
-                <li id="import">
-                  <a href="#/pageimport">
-                    <img src="img/wireframe_mono/blacks/16x16/doc_import.png" />
-                    Import
-                  </a>
-                </li>
-                <li id="delall">
-                  <a href="#/delete-all">
-                    <img src="img/wireframe_mono/blacks/16x16/delete.png" />
-                    REMOVE EVERYTING
-                  </a>
-                </li>
-              </ul>
-              <a class="close-btn" id="nav-close-btn" href="#top">
-                Return to Content
+    <script type="text/x-handlebars" data-template-name="walls">
+      <nav id="menu">
+        <ul>
+          <li>
+            <a href="#">
+              <img src="img/wireframe_mono/white/16x16/delete.png" />
+              Close menu
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <img src="img/wireframe_mono/white/16x16/home.png" />
+              Home
+            </a>
+          </li>
+          {{#each wall in model}}
+            <li>
+              {{#link-to 'walls.wall' wall}}
+                <img src="img/wireframe_mono/white/16x16/spechbubble_2.png" />
+                {{wall.title}}
+              {{/link-to}}
+            </li>
+          {{else}}
+            <li class="nowalls">
+              <a href="#">
+                (you have no walls here)
               </a>
-            </div>
-          </nav>
-          <div id="main" role="main">
-            <article class="block prose">
-              <div data-role="page" id="pagehome">
-                <h4>Instant. Messaging.</h4>
-                <p>You don't have to install, or download anything. The Wall works on your PC or mobile device instantly.</p>
-                <h4>Security.</h4>
-                <p>The Wall uses strong encryption to make truly secret communication possible.</p>
-                <h4>Privacy.</h4>
-                <p>The Wall uses a simple, proven trick to keep your conversations safe.
-                Only those who know the URL can read and write to you Wall.</p>
-                <h4>Simplicity.</h4>
-                <p>Start a conversation without registering. Share the URL to invite others.</p>
-                <h4>Keep it short.</h4>
-                <p>A post must be at most 200 characters long, and a wall can only keep 100 posts. If
-                a new post arrives, and your Wall is already 100 posts long, the oldest one is deleted
-                to make room for it.</p>
-                <h4>Off the record.</h4>
-                <p>Walls are forgotten 24 hours past the last post. Nothing is saved on disks, everything
-                is lost on power or software failures, attacks, confiscations.</p>
-              </div>
-              <div data-role="page" id="pageimport"><input type="file" id="fileinput">
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
+            </li>
+          {{/each}}
+          <li class="">
+            <a href="#/addnew">
+              <img src="img/wireframe_mono/white/16x16/sq_plus.png" />
+              Add new
+            </a>
+          </li>
+          <li id="addkey">
+            <a href="#/addkey">
+              <img src="img/wireframe_mono/white/16x16/key.png" />
+              Add key
+            </a>
+          </li>
+          <li id="export">
+            <a href="#/export">
+              <img src="img/wireframe_mono/white/16x16/doc_export.png" />
+              Export
+            </a>
+          </li>
+          <li id="import">
+            <a href="#/pageimport">
+              <img src="img/wireframe_mono/white/16x16/doc_import.png" />
+              Import
+            </a>
+          </li>
+          <li id="delall">
+            <a href="#/delete-all">
+              <img src="img/wireframe_mono/white/16x16/delete.png" />
+              REMOVE EVERYTING
+            </a>
+          </li>
+        </ul>
+      </nav>
     </script>
-    <script type="text/javascript" src="js/libs/modernizr.js"></script>
+    <script type="text/x-handlebars" data-template-name="wall">
+      Szia
+    </script>
+    <div id="content">
+      <a href="#" role="button" id="menubutton">Menu</a>
+      <h4>Instant. Messaging.</h4>
+      <p>You don't have to install, or download anything. The Wall works on your PC or mobile device instantly.</p>
+      <h4>Security.</h4>
+      <p>The Wall uses strong encryption to make truly secret communication possible.</p>
+      <h4>Privacy.</h4>
+      <p>The Wall uses a simple, proven trick to keep your conversations safe.
+      Only those who know the URL can read and write to you Wall.</p>
+      <h4>Simplicity.</h4>
+      <p>Start a conversation without registering. Share the URL to invite others.</p>
+      <h4>Keep it short.</h4>
+      <p>A post must be at most 200 characters long, and a wall can only keep 100 posts. If
+      a new post arrives, and your Wall is already 100 posts long, the oldest one is deleted
+      to make room for it.</p>
+      <h4>Off the record.</h4>
+      <p>Walls are forgotten 24 hours past the last post. Nothing is saved on disks, everything
+      is lost on power or software failures, attacks, confiscations.</p>
+    </div>
     <script type="text/javascript" src="js/libs/filesaver.js"></script>
     <script type="text/javascript" src="js/libs/blob.js"></script>
     <script type="text/javascript" src="js/libs/json2.js"></script>
