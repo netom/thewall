@@ -22,29 +22,29 @@ stanzas:
       # You can specify one or more hostnames for your application to respond
       # to. The primary hostname will be used for generating your application
       # root.
-      - www.thewall.com
+      - donotsavemy.info
 
   # Static files.
   - type: static-files
     hosts:
-      - static.thewall.com
+      - donotsavemy.info
     root: ../static
 
     # Uncomment to turn on directory listings.
     # directory-listing: true
 
   # Redirect plain domain name to www.
-  - type: redirect
-
-    hosts:
-      - thewall.com
-    actions:
-      - host: www.thewall.com
-        # secure: false
-        # port: 80
-
-    # Uncomment to switch to a non-permanent redirect.
-    # status: 303
+  #- type: redirect
+  #
+  #  hosts:
+  #    - thewall.com
+  #  actions:
+  #    - host: www.thewall.com
+  #      # secure: false
+  #      # port: 80
+  #
+  #  # Uncomment to switch to a non-permanent redirect.
+  #  # status: 303
 
 # Use the following to automatically copy your bundle upon creation via `yesod
 # keter`. Uses `scp` internally, so you can set it to a remote destination
