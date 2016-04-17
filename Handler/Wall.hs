@@ -51,7 +51,7 @@ getWallR key = do
                    Just u -> renderfunc u
                    Nothing -> ""
 
-    qrpng <- liftIO $ getQRPng $ unpack surl
+    qrpng <- liftIO $ getQRPng $ T.unpack surl
     -- ---------------------------------------------
 
     maybeNick <- lookupSession (T.concat ["nick", surl])
@@ -65,9 +65,9 @@ getWallR key = do
     (widget, enctype) <- generateFormPost $ postForm $ Just post
 
     yesod <- getYesod
-    ttl <- fmap extraTtl getExtra
+    let ttl = appTtl $ appSettings yesod
 
-    PostList chan version expire ps <- liftIO $ getPosts (posts yesod) key ttl
+    PostList _ version expire ps <- liftIO $ getPosts (appPosts yesod) key ttl
 
     defaultLayout $ do
         $(widgetFile "wall")
@@ -82,23 +82,23 @@ postWallR key = do
                    Just u -> renderfunc u
                    Nothing -> ""
 
-    qrpng <- liftIO $ getQRPng $ unpack surl
+    qrpng <- liftIO $ getQRPng $ T.unpack surl
     -- ---------------------------------------------
 
     ((result, widget), enctype) <- runFormPost $ postForm Nothing
 
     yesod <- getYesod
-    ttl <- fmap extraTtl getExtra
+    let ttl = appTtl $ appSettings yesod
 
     case result of
         FormSuccess post -> do
             let Post _ nick _ = post
             setSession (T.concat ["nick", surl]) nick
-            liftIO $ addPost (posts yesod) key post ttl
+            liftIO $ addPost (appPosts yesod) key post ttl
 
             redirect (WallR key)
-        FormFailure err -> do
-            PostList chan version expire ps <- liftIO $ getPosts (posts yesod) key ttl
+        FormFailure _ -> do
+            PostList _ version expire ps <- liftIO $ getPosts (appPosts yesod) key ttl
             defaultLayout $ do
                 $(widgetFile "wall")
         FormMissing -> do

@@ -6,8 +6,8 @@ import State
 getPollR :: Text -> Int -> Handler Value
 getPollR key lastVersion = do
     yesod <- getYesod
-    ttl <- fmap extraTtl getExtra
+    let ttl = appTtl $ appSettings yesod
 
-    postList <- liftIO $ getNewPosts (posts yesod) key ttl lastVersion
+    postList <- liftIO $ getNewPosts (appPosts yesod) key ttl lastVersion
 
     returnJson postList

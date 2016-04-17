@@ -10,6 +10,8 @@ import qualified Data.HashMap as H
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Vector.Storable as V
 
+import Prelude ( (!!) )
+
 -- This function fetches a postlist for a key.
 -- It either gots Nothing, of Just postlist.
 -- In the first case, the fMissing function is called with the postmap

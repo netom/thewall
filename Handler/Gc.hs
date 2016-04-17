@@ -5,13 +5,11 @@ import State
 
 getGcR :: Text -> Handler Html
 getGcR key = do
-    syskey <- fmap extraSyskey getExtra
     yesod <- getYesod
-    
+    let syskey = appSyskey $ appSettings yesod
     if syskey == key
         then do
-            liftIO $ gcPosts (posts yesod)
+            liftIO $ gcPosts (appPosts yesod)
             return "OK"
         else do
             return "ERR"
-    
