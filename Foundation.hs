@@ -84,8 +84,6 @@ instance Yesod App where
             Nothing -> getApprootText guessApproot app req
             Just root -> root
 
-    -- Store session data on the client in encrypted cookies,
-    -- default session idle timeout is 120 minutes
     makeSessionBackend _ = return Nothing
 
     -- Yesod Middleware allows you to run code before and after each handler function.

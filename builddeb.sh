@@ -2,7 +2,7 @@
 
 PROJECTNAME=thewall
 MAJOR=1
-MINOR=0
+MINOR=1
 PKREV=1
 
 BUILDDIR=.build/${PROJECTNAME}_${MAJOR}.${MINOR}-${PKREV}
@@ -25,8 +25,8 @@ cp -r static/* $BUILDDIR/opt/thewall/static
 
 mkdir -p $BUILDDIR/DEBIAN
 tee $BUILDDIR/DEBIAN/control <<EOF
-Package: thewall
-Version: 1.0-1
+Package: $PROJECTNAME
+Version: $MAJOR.$MINOR-$PKREV
 Section: base
 Priority: optional
 Architecture: amd64
