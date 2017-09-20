@@ -49,14 +49,12 @@ data AppSettings = AppSettings
     -- ^ Assume that files in the static dir may change after compilation
     , appSkipCombining          :: Bool
     -- ^ Perform no stylesheet/script combining
-
-    -- Example app-specific configuration values.
-    , appCopyright              :: Text
-    -- ^ Copyright text to appear in the footer of the page
-    , appAnalytics              :: Maybe Text
-    -- ^ Google Analytics code
-    , appSyskey                 :: Text
+    , appBtcAddress             :: Text
+    -- ^ Bitcoin address for donations
     , appTtl                    :: Int
+    -- ^ Wall TTL in seconds
+    , appGcPeriod               :: Int
+    -- ^ Run GC periodically every gcPeriod seconds
     }
 
 instance FromJSON AppSettings where
@@ -79,10 +77,9 @@ instance FromJSON AppSettings where
         appMutableStatic          <- o .:? "mutable-static"   .!= defaultDev
         appSkipCombining          <- o .:? "skip-combining"   .!= defaultDev
 
-        appCopyright              <- o .: "copyright"
-        appAnalytics              <- o .:? "analytics"
-        appSyskey                 <- o .: "syskey"
+        appBtcAddress             <- o .: "btcAddress"
         appTtl                    <- o .: "ttl"
+        appGcPeriod               <- o .: "gcPeriod"
 
         return AppSettings {..}
 

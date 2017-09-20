@@ -10,6 +10,10 @@ import State
 
 getHomeR :: Handler Html
 getHomeR = do
+    yesod <- getYesod
+
+    let btcAddress = appBtcAddress $ appSettings yesod
+
     randomWall <- liftIO getRandomWall
     renderfunc <- getUrlRender
 

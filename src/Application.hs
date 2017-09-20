@@ -20,7 +20,7 @@ module Application
     ) where
 
 import Control.Monad.Logger                 (liftLoc)
-import Import
+import Import hiding (threadDelay)
 import Language.Haskell.TH.Syntax           (qLocation)
 import Network.Wai (Middleware)
 import Network.Wai.Handler.Warp             (Settings, defaultSettings,
@@ -35,6 +35,7 @@ import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
                                              toLogStr)
 
 import qualified Data.HashMap as H
+import Control.Concurrent
 
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
@@ -42,7 +43,8 @@ import Handler.Common
 import Handler.Home
 import Handler.Wall
 import Handler.Poll
-import Handler.Gc
+
+import State
 
 -- This line actually creates our YesodDispatch instance. It is the second half
 -- of the call to mkYesodData which occurs in Foundation.hs. Please see the
@@ -63,9 +65,7 @@ makeFoundation appSettings = do
         (if appMutableStatic appSettings then staticDevel else static)
         (appStaticDir appSettings)
 
-    pl <- atomically $ newTVar H.empty
-
-    let appPosts = pl
+    appPosts <- atomically $ newTVar H.empty
 
     -- Return the foundation
     return App {..}
@@ -140,6 +140,11 @@ appMain = do
 
     -- Generate a WAI Application from the foundation
     app <- makeApplication foundation
+
+    -- Start the garbage collector thread
+    _ <- forkIO $ forever $ do
+        threadDelay $ 1000000 * appGcPeriod settings
+        gcPosts $ appPosts foundation
 
     -- Run the application with Warp
     runSettings (warpSettings foundation) app

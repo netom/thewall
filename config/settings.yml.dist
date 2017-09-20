@@ -20,8 +20,11 @@ ip-from-header: "_env:IP_FROM_HEADER:false"
 # mutable-static: false
 # skip-combining: false
 
-copyright: Insert copyright statement here
-#analytics: UA-YOURCODE
+# Bitcoin address for donations
+btcAddress: "1FVpwUHpkTy6SVLVPM6encMTHLSpi6ru4z"
 
-syskey: jH4haako4tiGwC2nbn4GceVgjIUghsAE
+# Wall TTL in seconds
 ttl: 86400
+
+# Run GC periodically every gcPeriod seconds
+gcPeriod: 600

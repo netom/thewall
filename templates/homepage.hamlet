@@ -6,7 +6,7 @@
   <p>
     <img .qrcode src="data:image/png;base64,#{qrpng}">
   <p>
-    Donate BTC: 1FVpwUHpkTy6SVLVPM6encMTHLSpi6ru4z
+    Donate BTC: #{btcAddress}
 
 <div class="row marketing">
   <div class="col-lg-6">
