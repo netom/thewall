@@ -2,26 +2,13 @@
 
 PROJECTNAME=thewall
 MAJOR=1
-MINOR=1
+MINOR=2
 PKREV=1
 
 BUILDDIR=.build/${PROJECTNAME}_${MAJOR}.${MINOR}-${PKREV}
 
 stack setup
 stack build
-
-mkdir -p $BUILDDIR/opt/thewall/bin
-cp .stack-work/install/x86_64-linux/lts-5.12/7.10.3/bin/thewall $BUILDDIR/opt/thewall/bin
-
-mkdir -p $BUILDDIR/opt/thewall/config
-cp config/* $BUILDDIR/opt/thewall/config
-
-
-rm -rf static/tmp/*
-rm -rf static/combined/*
-
-mkdir -p $BUILDDIR/opt/thewall/static
-cp -r static/* $BUILDDIR/opt/thewall/static
 
 mkdir -p $BUILDDIR/DEBIAN
 tee $BUILDDIR/DEBIAN/control <<EOF
@@ -44,6 +31,18 @@ chown -R thewall:thewall /opt/thewall
 EOF
 
 chmod 0755 $BUILDDIR/DEBIAN/postinst
+
+mkdir -p $BUILDDIR/opt/thewall/bin
+cp `stack path --local-install-root`/bin/thewall $BUILDDIR/opt/thewall/bin
+
+mkdir -p $BUILDDIR/opt/thewall/config
+cp config/* $BUILDDIR/opt/thewall/config
+
+rm -rf static/tmp/*
+rm -rf static/combined/*
+
+mkdir -p $BUILDDIR/opt/thewall/static
+cp -r static/* $BUILDDIR/opt/thewall/static
 
 mkdir -p $BUILDDIR/etc/init
 tee $BUILDDIR/etc/init/thewall.conf <<EOF

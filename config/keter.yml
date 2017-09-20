@@ -12,7 +12,11 @@ stanzas:
 
     # Name of your executable. You are unlikely to need to change this.
     # Note that all file paths are relative to the keter.yml file.
-    exec: ../dist/build/thewall/thewall
+    #
+    # The path given is for Stack projects. If you're still using cabal, change
+    # to
+    # exec: ../dist/build/thewall/thewall
+    exec: ../dist/bin/thewall
 
     # Command line options passed to your application.
     args: []
@@ -21,7 +25,7 @@ stanzas:
       # You can specify one or more hostnames for your application to respond
       # to. The primary hostname will be used for generating your application
       # root.
-      - www.thewall.com
+      - donotsavemy.info
 
     # Enable to force Keter to redirect to https
     # Can be added to any stanza
@@ -30,24 +34,24 @@ stanzas:
   # Static files.
   - type: static-files
     hosts:
-      - static.my-project.com
+      - donotsavemy.info
     root: ../static
 
     # Uncomment to turn on directory listings.
     # directory-listing: true
 
   # Redirect plain domain name to www.
-  - type: redirect
+  #- type: redirect
 
-    hosts:
-      - thewall.com
-    actions:
-      - host: www.thewall.com
-        # secure: false
-        # port: 80
+  #  hosts:
+  #    - thewall.com
+  #  actions:
+  #    - host: www.thewall.com
+  #      # secure: false
+  #      # port: 80
 
-    # Uncomment to switch to a non-permanent redirect.
-    # status: 303
+  #  # Uncomment to switch to a non-permanent redirect.
+  #  # status: 303
 
 # Use the following to automatically copy your bundle upon creation via `yesod
 # keter`. Uses `scp` internally, so you can set it to a remote destination

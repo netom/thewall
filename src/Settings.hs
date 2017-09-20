@@ -1,4 +1,8 @@
-{-# Language CPP #-}
+{-# LANGUAGE CPP               #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
+{-# LANGUAGE TemplateHaskell   #-}
 -- | Settings are centralized, as much as possible, into this file. This
 -- includes database connection settings, static file locations, etc.
 -- In addition, you can configure a number of different aspects of Yesod
@@ -7,12 +11,11 @@
 module Settings where
 
 import ClassyPrelude.Yesod
-import Control.Exception           (throw)
+import qualified Control.Exception as Exception
 import Data.Aeson                  (Result (..), fromJSON, withObject, (.!=),
                                     (.:?))
 import Data.FileEmbed              (embedFile)
 import Data.Yaml                   (decodeEither')
-import Database.Persist.Sqlite     (SqliteConf)
 import Language.Haskell.TH.Syntax  (Exp, Name, Q)
 import Network.Wai.Handler.Warp    (HostPreference)
 import Yesod.Default.Config2       (applyEnvValue, configSettingsYml)
@@ -25,8 +28,6 @@ import Yesod.Default.Util          (WidgetFileSettings, widgetFileNoReload,
 data AppSettings = AppSettings
     { appStaticDir              :: String
     -- ^ Directory from which to serve static files.
-    , appDatabaseConf           :: SqliteConf
-    -- ^ Configuration settings for accessing the database.
     , appRoot                   :: Maybe Text
     -- ^ Base for all generated URLs. If @Nothing@, determined
     -- from the request headers.
@@ -61,13 +62,12 @@ data AppSettings = AppSettings
 instance FromJSON AppSettings where
     parseJSON = withObject "AppSettings" $ \o -> do
         let defaultDev =
-#if DEVELOPMENT
+#ifdef DEVELOPMENT
                 True
 #else
                 False
 #endif
         appStaticDir              <- o .: "static-dir"
-        appDatabaseConf           <- o .: "database"
         appRoot                   <- o .:? "approot"
         appHost                   <- fromString <$> o .: "host"
         appPort                   <- o .: "port"
@@ -114,7 +114,8 @@ configSettingsYmlBS = $(embedFile configSettingsYml)
 
 -- | @config/settings.yml@, parsed to a @Value@.
 configSettingsYmlValue :: Value
-configSettingsYmlValue = either throw id $ decodeEither' configSettingsYmlBS
+configSettingsYmlValue = either Exception.throw id
+                       $ decodeEither' configSettingsYmlBS
 
 -- | A version of @AppSettings@ parsed at compile time from @config/settings.yml@.
 compileTimeAppSettings :: AppSettings

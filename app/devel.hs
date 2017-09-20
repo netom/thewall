@@ -1,5 +1,5 @@
 {-# LANGUAGE PackageImports #-}
-import "my-project" Application (develMain)
+import "thewall" Application (develMain)
 import Prelude (IO)
 
 main :: IO ()

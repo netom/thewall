@@ -1,3 +1,8 @@
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes       #-}
+{-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TypeFamilies      #-}
+{-# LANGUAGE FlexibleContexts  #-}
 module Handler.Wall where
 
 import Import
@@ -12,6 +17,10 @@ import qualified Data.Text as T
 fsPIN :: Text -> Text -> FieldSettings master
 fsPIN name ph = FieldSettings "" Nothing (Just name) (Just name) [("placeholder", ph)]
 
+wallForm :: Html -> FieldView App -> FieldView App -> Widget
+wallForm extra nickView bodyView = do
+    $(widgetFile "wallForm")
+
 -- This form is used to post / process a message
 postForm :: Maybe Post -> Html -> MForm Handler (FormResult Post, Widget)
 postForm post extra = do
@@ -22,10 +31,7 @@ postForm post extra = do
 
     let postRes = Post now <$> nickRes <*> bodyRes
 
-    let widget = do
-        $(widgetFile "wallForm")
-
-    return (postRes, widget)
+    return (postRes, wallForm extra nickView bodyView)
   where
     nickField = check validateNick textField
     postField = check validatePost textareaField

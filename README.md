@@ -28,8 +28,7 @@ Installation
 You will need cabal to install the service. Just 'cd' into the root
 directory of the project, and issue
 
-    cabal update # You might need this, but not always necessary.
-    cabal install
+    stack install
 
 Running
 =======

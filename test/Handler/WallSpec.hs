@@ -1,8 +1,8 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Handler.WallSpec (spec) where
 
 import TestImport
 import qualified Data.Text as T
-import Control.Concurrent
 
 spec :: Spec
 spec = withApp $ do
@@ -20,7 +20,7 @@ spec = withApp $ do
             addPostParam "body" "Some post content"
 
         statusIs 303 -- We should follow the PRG pattern
-        assertHeader "Location" "http://localhost:3000/wall/this-is-a-test-wall"
+        assertHeader "Location" "/wall/this-is-a-test-wall"
 
         get $ WallR "this-is-a-test-wall"
         statusIs 200

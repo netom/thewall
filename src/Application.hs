@@ -1,3 +1,10 @@
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module Application
     ( getApplicationDev
@@ -58,14 +65,10 @@ makeFoundation appSettings = do
 
     pl <- atomically $ newTVar H.empty
 
-    let mkFoundation = App {..}
-        -- The App {..} syntax is an example of record wild cards. For more
-        -- information, see:
-        -- https://ocharles.org.uk/blog/posts/2014-12-04-record-wildcards.html
-        appPosts = pl
+    let appPosts = pl
 
     -- Return the foundation
-    return $ mkFoundation
+    return App {..}
 
 -- | Convert our foundation to a WAI Application by calling @toWaiAppPlain@ and
 -- applying some additional middlewares.
@@ -115,7 +118,7 @@ getApplicationDev = do
     return (wsettings, app)
 
 getAppSettings :: IO AppSettings
-getAppSettings = loadAppSettings [configSettingsYml] [] useEnv
+getAppSettings = loadYamlSettings [configSettingsYml] [] useEnv
 
 -- | main function for use by yesod devel
 develMain :: IO ()
@@ -125,7 +128,7 @@ develMain = develMainHelper getApplicationDev
 appMain :: IO ()
 appMain = do
     -- Get the settings from all relevant sources
-    settings <- loadAppSettingsArgs
+    settings <- loadYamlSettingsArgs
         -- fall back to compile-time values, set to [] to require values at runtime
         [configSettingsYmlValue]
 

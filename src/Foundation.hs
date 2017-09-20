@@ -1,11 +1,21 @@
+{-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE RecordWildCards #-}
+
 module Foundation where
 
 import Import.NoFoundation
-import Text.Hamlet          (hamletFile)
-import Text.Jasmine         (minifym)
-import Yesod.Default.Util   (addStaticContentExternal)
-import Yesod.Core.Types     (Logger)
+import Text.Hamlet                 (hamletFile)
+import Text.Jasmine                (minifym)
+import Yesod.Core.Types            (Logger)
+import Yesod.Default.Util          (addStaticContentExternal)
 import qualified Yesod.Core.Unsafe as Unsafe
+-- import qualified Data.CaseInsensitive as CI
+-- import qualified Data.Text.Encoding as TE
 import qualified Data.HashMap as H
 
 -- Data type for storing posts
@@ -91,13 +101,11 @@ instance Yesod App where
     -- Some users may also want to add the defaultCsrfMiddleware, which:
     --   a) Sets a cookie with a CSRF token in it.
     --   b) Validates that incoming write requests include that token in either a header or POST parameter.
+    -- To add it, chain it together with the defaultMiddleware: yesodMiddleware = defaultYesodMiddleware . defaultCsrfMiddleware
     -- For details, see the CSRF documentation in the Yesod.Core.Handler module of the yesod-core package.
     yesodMiddleware = defaultYesodMiddleware
 
     defaultLayout widget = do
-        -- master <- getYesod
-        -- mmsg <- getMessage
-
         -- We break up the default layout into two components:
         -- default-layout is the contents of the body tag, and
         -- default-layout-wrapper is the entire page. Since the final
@@ -105,14 +113,15 @@ instance Yesod App where
         -- you to use normal widget features in default-layout.
 
         pc <- widgetToPageContent $ do
-            addStylesheet $ StaticR css_normalize_css
             addStylesheet $ StaticR css_bootstrap_css
+            addStylesheet $ StaticR css_thewall_css
+            addScript $ StaticR js_jquery_js
             $(widgetFile "default-layout")
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
-    -- The page to be redirected to when authentication is required.
-    authRoute _ = Nothing
-
+    -- Routes not requiring authenitcation.
+    isAuthorized FaviconR _ = return Authorized
+    isAuthorized RobotsR _ = return Authorized
     -- Default to Authorized for now.
     isAuthorized _ _ = return Authorized
 
@@ -143,6 +152,11 @@ instance Yesod App where
             || level == LevelError
 
     makeLogger = return . appLogger
+
+-- Define breadcrumbs.
+--instance YesodBreadcrumbs App where
+--  breadcrumb HomeR = return ("Home", Nothing)
+--  breadcrumb  _ = return ("home", Nothing)
 
 -- This instance is required to use forms. You can modify renderMessage to
 -- achieve customized and internationalized form validation messages.

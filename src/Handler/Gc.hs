@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Handler.Gc where
 
 import Import
