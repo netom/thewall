@@ -48,6 +48,8 @@ dependencies:
 - haskell-qrencode
 - random
 - base64-bytestring
+- yesod-websockets
+- websockets
 
 # The library contains all of our application code. The executable
 # defined below is just a thin wrapper.

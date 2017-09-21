@@ -55,6 +55,10 @@ data AppSettings = AppSettings
     -- ^ Wall TTL in seconds
     , appGcPeriod               :: Int
     -- ^ Run GC periodically every gcPeriod seconds
+    , appWallMaxSize            :: Int
+    -- ^ Maximal size of the wall in number of posts
+    , appPostMaxSize            :: Int
+    -- ^ Maximal size of a post in characters
     }
 
 instance FromJSON AppSettings where
@@ -80,6 +84,8 @@ instance FromJSON AppSettings where
         appBtcAddress             <- o .: "btcAddress"
         appTtl                    <- o .: "ttl"
         appGcPeriod               <- o .: "gcPeriod"
+        appWallMaxSize            <- o .: "wallMaxSize"
+        appPostMaxSize            <- o .: "postMaxSize"
 
         return AppSettings {..}
 

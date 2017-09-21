@@ -14,41 +14,60 @@ import Text.Jasmine                (minifym)
 import Yesod.Core.Types            (Logger)
 import Yesod.Default.Util          (addStaticContentExternal)
 import qualified Yesod.Core.Unsafe as Unsafe
--- import qualified Data.CaseInsensitive as CI
--- import qualified Data.Text.Encoding as TE
 import qualified Data.HashMap as H
 
--- Data type for storing posts
+-- Data type for storing a post
+-- Contains the time it was created, a nick and the actual text message
 data Post = Post
     { postTime :: UTCTime
     , postNick :: Text
-    , postBody :: Textarea
+    , postBody :: Text
     }
 
 instance ToJSON Post where
     toJSON Post {..} = object
         [ "time" .= show postTime
         , "nick" .= postNick
-        , "body" .= unTextarea postBody
+        , "body" .= postBody
         ]
 
+instance FromJSON Post where
+    parseJSON (Object v) = Post <$> v .: "time" <*> v .: "nick" <*> v .: "body"
+    parseJSON _ = empty
+
+-- A message over a websocket connection
+data WsMessage = WsPost Text Post | WsList Text
+
+instance ToJSON WsMessage where
+    toJSON (WsPost key post) = object
+        [ "type" .= ("post" :: Text)
+        , "key"  .= key
+        , "post" .= post
+        ]
+    toJSON (WsList key) = object
+        [ "type" .= ("list" :: Text)
+        , "key"  .= key
+        ]
+
+instance FromJSON WsMessage where
+    parseJSON (Object v) = 
+        case lookup "type" v of
+            Just "post" -> WsPost <$> v .: "key" <*> v .: "post"
+            Just "list" -> WsList <$> v .: "key"
+            _           -> empty
+    parseJSON _ = empty
 
 -- A "PostList" is actually a timestamp, a list-of-posts, and a channel.
 -- The timestamp shows when this particular list will expire.
--- Data type for possible events
-data PostListEvent = EventNewPost
-
 data PostList = PostList
-    { postListChannel :: TChan PostListEvent
-    , postListVersion :: Int
+    { postListChannel :: TChan WsMessage
     , postListExpire  :: UTCTime
     , postListPosts   :: [Post]
     }
 
 instance ToJSON PostList where
     toJSON PostList {..} = object 
-        [ "version" .= postListVersion
-        , "expire"  .= postListExpire
+        [ "expire"  .= postListExpire
         , "posts"   .= postListPosts
         ]
 

@@ -94,12 +94,8 @@ spec = withApp $ do
             addPostParam "body" "Some post content 2"
         statusIs 303
 
-        -- Wait 6 seconds, so the first wall will expire
+        -- Wait 6 seconds, so the first wall will expire and be collected
         liftIO $ threadDelay 6000000
-
-        -- Call the garbage collector.
-        get $ GcR "testsyskey"
-        statusIs 200
 
         -- First wall: should have been deleted
         get $ WallR "this-is-a-test-wall-1"

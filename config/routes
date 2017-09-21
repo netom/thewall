@@ -5,4 +5,3 @@
 
 / HomeR GET
 /wall/#Text WallR GET POST
-/poll/#Text/#Int PollR GET

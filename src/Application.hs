@@ -42,7 +42,6 @@ import Control.Concurrent
 import Handler.Common
 import Handler.Home
 import Handler.Wall
-import Handler.Poll
 
 import State
 

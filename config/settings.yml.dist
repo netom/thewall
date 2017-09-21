@@ -28,3 +28,9 @@ ttl: 86400
 
 # Run GC periodically every gcPeriod seconds
 gcPeriod: 600
+
+# Maximal size of the wall in number of posts
+wallMaxSize: 100
+
+# Maximal size of a post in characters
+postMaxSize: 256
