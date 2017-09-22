@@ -2,9 +2,8 @@
   <h1>Hey You
   <p class="lead">Dear Visitor! Here is your link to a new wall:
   <p>
-    <a class="btn btn-xs btn-success" href="#{randomWallLink}" role="button" id="walllink">#{randomWall}</a>
-  <p>
-    <img .qrcode src="data:image/png;base64,#{qrpng}">
+    <a class="btn btn-xs btn-success" href="#" role="button" id="walllink"></a>
+  <p id="qrcode">
   <p>
     Donate BTC: #{btcAddress}
 

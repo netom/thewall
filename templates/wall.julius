@@ -1,5 +1,3 @@
-var version = #{toJSON version};
-
 $(document).ready(function () {
     var ta = $('#body');
 
@@ -17,7 +15,7 @@ $(document).ready(function () {
 function refreshWall() {
     var postsel = $('#posts');
 
-    $.get("/poll/" + #{toJSON key} + "/" + version, function(data) {
+    $.get("/poll/" + #{toJSON key}, function(data) {
 
     var posts = data['posts'];
     if (data['version']) {

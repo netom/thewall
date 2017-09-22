@@ -1,14 +1,9 @@
+{-# Language NoImplicitPrelude #-}
 module State where
 
 import Import
 import Data.Time
-import Data.QRCode
-import System.Random
-import Codec.Picture
-import qualified Data.ByteString.Base64 as B64
 import qualified Data.HashMap as H
-import qualified Data.ByteString.Lazy as BL
-import qualified Data.Vector.Storable as V
 
 -- This function fetches a postlist for a key.
 -- It either gots Nothing, of Just postlist.
@@ -39,20 +34,20 @@ addPost :: TVar PostMap -> Text -> Post -> Int -> IO ()
 addPost tvpostmap key post ttl = do
     chan <- withPostlist tvpostmap key ttl (\tvpm expires -> do
             chan <- newBroadcastTChan
-            modifyTVar tvpm (H.alter (\_ -> Just $ PostList chan 0 expires [post]) key)
+            modifyTVar tvpm (H.alter (\_ -> Just $ PostList chan expires [post]) key)
             return chan
-        ) (\tvpm expires (PostList chan version _ ps) -> do
+        ) (\tvpm expires (PostList chan _ ps) -> do
             modifyTVar tvpm (H.alter (\_ -> Just $ PostList chan expires (post : take 99 ps)) key) --TODO: 100 to settings
             return chan
         )
 
-    atomically $ writeTChan chan $ WsMessage key post
+    atomically $ writeTChan chan $ WsPost key post
 
 getPosts :: TVar PostMap -> Text -> Int -> IO PostList
 getPosts tvpostmap key ttl = do
     pl <- withPostlist tvpostmap key ttl (\tvpm expires -> do
             chan <- newBroadcastTChan
-            let pl = PostList chan 0 expires []
+            let pl = PostList chan expires []
             modifyTVar tvpm (H.alter (\_ -> Just pl) key)
             return pl
         ) (\_ _ pl -> return pl)

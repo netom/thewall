@@ -4,4 +4,4 @@
 /robots.txt RobotsR GET
 
 / HomeR GET
-/wall/#Text WallR GET POST
+/wall/#Text WallR GET
