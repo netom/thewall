@@ -1,3 +1,7 @@
+var example_post1 = {"type":"post","key":"dashkjkj","post":{"nick":"netom","body":"eeeeeeee"}};
+var example_post2 = {"type":"post","key":"dashkjkj","post":{"time":"2017-01-01T00:00:00Z","nick":"netom","body":"eeeeeeee"}};
+var_example_list = {"type":"list","key":"dashkjkj"};
+
 $(document).ready(function () {
     var ta = $('#body');
 
