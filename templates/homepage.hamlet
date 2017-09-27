@@ -1,6 +1,6 @@
 <div class="jumbotron">
-  <h1>Hey You
-  <p class="lead">Dear Visitor! Here is your link to a new wall:
+  <h1>Talk now.
+  <p class="lead">Dear Visitor! Here is your link to a new message wall:
   <p>
     <a class="btn btn-xs btn-success" href="#" role="button" id="walllink"></a>
   <p id="qrcode">
@@ -11,26 +11,27 @@
   <div class="col-lg-6">
     <h4>Instant. Messaging.
     <p>
-      You don't have to install, or download anything. The Wall works on your PC or mobile device instantly.
+      You don't have to download or install anything. This site works on your PC or mobile device right now.
 
     <h4>Security.
     <p>
-      The Wall uses strong encryption to make truly secret communication possible.
+      We use strong TLS encryption to make truly secret communication possible.
 
     <h4>Privacy.
     <p>
-      The Wall uses a simple, proven trick to keep your conversations safe.
-      Only those who know the URL can read and write to you Wall.
+      We use a simple, proven trick to keep your conversations safe.
+      Only those who know the URL can read and write to your message wall.
 
   <div class="col-lg-6">
     <h4>Simplicity.
     <p>
       Start a conversation without registering. Share the URL to invite others.
+      Use the QR code to exchange links between devices in an instant.
 
     <h4>Keep it short.
     <p>
       A post must be at most 200 characters long, and a wall can only keep 100 posts. If
-      a new post arrives, and your Wall is already 100 posts long, the oldest one is deleted
+      a new post arrives, and your wall is already 100 posts long, the oldest one is deleted
       to make room for it.
 
     <h4>Off the record.
@@ -39,4 +40,3 @@
       is lost on power or software failures, attacks, confiscations.
 
   <h1>
-

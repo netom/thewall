@@ -1,46 +1,83 @@
-var example_post1 = {"type":"post","key":"dashkjkj","post":{"nick":"netom","body":"eeeeeeee"}};
-var example_post2 = {"type":"post","key":"dashkjkj","post":{"time":"2017-01-01T00:00:00Z","nick":"netom","body":"eeeeeeee"}};
-var_example_list = {"type":"list","key":"dashkjkj"};
+function postMessage(ws, nick, body) {
+    var post = {
+        "type":"post",
+        "key":#{toJSON key},
+        "post":{
+            "time": new Date(), // .toJSON()?
+            "nick":nick,
+            "body":body
+        }
+    };
+    console.log("Sending post");
+    ws.send(JSON.stringify(post));
+}
 
-$(document).ready(function () {
-    var ta = $('#body');
+function mainLoop(nick, body, posts, sendbtn) {
+    var listMsg = {
+        "type": "list",
+        "key": #{toJSON key}
+    };
 
-    ta.keydown(function(event) {
+    var wsUrl = #{toJSON $ urlRender $ WallR key}.replace(/^http/, "ws");
+
+    var ws = new WebSocket(wsUrl);
+
+    ws.onmessage = function(wsmsg) {
+        console.log(wsmsg);
+
+        var msg = JSON.parse(wsmsg.data);
+
+        switch (msg.type) {
+            case 'post':
+                posts.html(
+                    '<li class="post"><span class="nick">' + msg.post.nick +
+                    '</span> <span class="time">' + msg.post.time +
+                    '</span><br/>' + msg.post.body + '</li>' +
+                    posts.html()
+                );
+                break;
+        }
+    };
+
+    ws.onopen = function(msg) {
+        posts.html('');
+        ws.send(JSON.stringify(listMsg));
+    };
+
+    ws.onclose = function() {
+        setTimeout(function() {mainLoop(nick, body, posts, sendbtn)}, 2000);
+    };
+
+    var sendf = function(event) {
+        postMessage(ws, nick.val(), body.val());
+        return false;
+    };
+
+    body.keydown(function(event) {
         if (event.shiftKey && event.keyCode == 13) {
-            $(this.form).submit();
+            sendf(event);
             return false;
         }
     });
-    ta.focus();
-
-    setTimeout("refreshWall()", 1);
-});
-
-function refreshWall() {
-    var postsel = $('#posts');
-
-    $.get("/poll/" + #{toJSON key}, function(data) {
-
-    var posts = data['posts'];
-    if (data['version']) {
-        //TODO broáf
-        version = data['version'];
-    } else {
-        return;
-    }
-
-    postsel.html('');
-    for (i in posts) {
-        var post = posts[i];
-        postsel.html(
-            postsel.html() +
-            '<li class="post"><span class="nick">' + post['nick'] +
-            '</span> <span class="time">' + post['time'] +
-            '</span><br/>' + post['body'] + '</li>'
-        );
-    }
-
-    }).always(function() {
-        setTimeout("refreshWall()", 1000);
-    });
+    sendbtn.click(sendf);
 }
+
+$(document).ready(function () {
+    var nick = $('#nick');
+    var body = $('#body');
+    var posts = $('#posts');
+    var sendbtn = $('#send');
+
+    var qrcode = new QRCode("qrcode", {
+        text: #{toJSON $ urlRender $ WallR key},
+        width: 67,
+        height: 67,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.L
+    });
+
+    body.focus();
+
+    mainLoop(nick, body, posts, sendbtn);
+});

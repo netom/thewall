@@ -14,10 +14,6 @@ $newline never
 
     ^{pageHead pc}
 
-    \<!--[if lt IE 9]>
-    \<script src="/static/html5.js"></script>
-    \<![endif]-->
-
   <body>
     <div class=container>
       ^{pageBody pc}

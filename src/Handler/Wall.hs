@@ -32,7 +32,7 @@ getWallR key = do
             let txLoop = do
                  msg <- atomically $ readTChan mychan
                  WS.sendTextData conn $ encode msg
-                 -- TODO: will this terminate, or throw an error?
+                 txLoop
                  in txLoop
 
         -- 2. Receive data from the connection: 
@@ -41,22 +41,17 @@ getWallR key = do
              case mbMsg of
                  Right msg -> do
                     case decode msg of
-                        Just (WsList _) -> do
-                            putStrLn $ "Received list command, sending list of posts"
-                            -- TODO
-                        Just (WsPost _ _) -> do
-                            putStrLn $ "Received post command, adding post"
-                            -- TODO
-                        _ -> do
-                            -- The message couldn't be decoded, just swallow it and continue.
-                            putStrLn $ "Error parsing message"
+                        Just (WsList wsKey) -> do
+                            pl <- getPosts tvpostmap wsKey ttl
+                            forM_ (reverse $ postListPosts pl) $ WS.sendTextData conn . encode . WsPost wsKey
+                        Just (WsPost wsKey wsPost) -> do
+                            addPost tvpostmap wsKey wsPost ttl
+                        _ -> return () -- The message couldn't be decoded, just swallow the error and continue.
                     rxLoop -- We're good, continue serving
-                 Left _ -> do
-                    -- An exception were thrown, leave the connection.
-                    putStrLn $ "Exception encountered, closing connection"
+                 Left _ -> return () -- An exception were thrown, leave the connection.
              in liftIO $ rxLoop -- TODO: does forkIO really work here?
 
-        liftIO $ putStrLn "Done with this."
+    urlRender <- getUrlRender
 
     defaultLayout $ do
         $(widgetFile "wall")

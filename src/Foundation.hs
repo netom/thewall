@@ -133,8 +133,11 @@ instance Yesod App where
 
         pc <- widgetToPageContent $ do
             addStylesheet $ StaticR css_bootstrap_css
+            addStylesheet $ StaticR css_bootstrap_theme_css
             addStylesheet $ StaticR css_thewall_css
             addScript $ StaticR js_jquery_js
+            addScript $ StaticR js_bootstrap_js
+            addScript $ StaticR js_qrcode_js
             $(widgetFile "default-layout")
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
