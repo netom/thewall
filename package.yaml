@@ -37,17 +37,11 @@ dependencies:
 - safe
 - unordered-containers
 - containers
-- vector
 - time
-- case-insensitive
 - wai
 
 - stm
 - hashmap
-- JuicyPixels
-- haskell-qrencode
-- random
-- base64-bytestring
 - yesod-websockets
 - websockets
 
