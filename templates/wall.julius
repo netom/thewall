@@ -1,3 +1,6 @@
+var swreg = null;
+var lastNotiTime = new Date();
+
 function postMessage(ws, nick, body) {
     var post = {
         "type":"post",
@@ -8,12 +11,22 @@ function postMessage(ws, nick, body) {
             "body":body
         }
     };
-    console.log("Sending post");
     ws.send(JSON.stringify(post));
 }
 
 function formError(msg) {
     alert(msg);
+}
+
+function setupNotifications() {
+    navigator.serviceWorker.register('/sw.js');
+    Notification.requestPermission(function(result) {
+      if (result === 'granted') {
+        navigator.serviceWorker.ready.then(function(registration) {
+          swreg = registration;
+        });
+      }
+    });
 }
 
 function mainLoop(nick, body, posts, sendbtn) {
@@ -33,11 +46,20 @@ function mainLoop(nick, body, posts, sendbtn) {
 
         switch (msg.type) {
             case 'post':
+                msg.post.time = new Date(msg.post.time);
                 var postNode = $('<li class="post"><span class="nick"></span> <span class="time"></span><br/><pre></pre></li>');
                 $('.nick', postNode).text(msg.post.nick);
-                $('.time', postNode).text(msg.post.time);
+                $('.time', postNode).text(msg.post.time.toUTCString());
                 $('pre',postNode).text(msg.post.body);
                 posts.prepend(postNode);
+
+                if (null != swreg) {
+                    if (msg.post.nick != nick.val() && msg.post.time >= lastNotiTime) {
+                        swreg.showNotification("Message from " + msg.post.nick);
+                        lastNotiTime = msg.post.time;
+                    }
+                }
+
                 break;
         }
     };
@@ -97,6 +119,8 @@ $(document).ready(function () {
     });
 
     body.focus();
+
+    setupNotifications();
 
     mainLoop(nick, body, posts, sendbtn);
 });

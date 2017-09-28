@@ -20,3 +20,6 @@ getFaviconR = do cacheSeconds $ 60 * 60 * 24 * 30 -- cache for a month
 getRobotsR :: Handler TypedContent
 getRobotsR = return $ TypedContent typePlain
                     $ toContent $(embedFile "config/robots.txt")
+
+getSwjsR :: Handler TypedContent
+getSwjsR = return $ TypedContent "application/javascript" "// Work-work."

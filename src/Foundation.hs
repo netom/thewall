@@ -26,7 +26,7 @@ data Post = Post
 
 instance ToJSON Post where
     toJSON Post {..} = object
-        [ "time" .= show postTime
+        [ "time" .= postTime
         , "nick" .= postNick
         , "body" .= postBody
         ]
