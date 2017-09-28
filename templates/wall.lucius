@@ -14,7 +14,14 @@ ul {
   text-align: center;
 }
 
-#nick, #body {
+#nick {
+  display: inline-block;
+  width: 200px;
+  border: solid 1px #777777;
+  margin-bottom: 5px;
+}
+
+#body {
   display: block;
   width: 100%;
   border: solid 1px #777777;

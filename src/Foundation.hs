@@ -138,6 +138,7 @@ instance Yesod App where
             addScript $ StaticR js_jquery_js
             addScript $ StaticR js_bootstrap_js
             addScript $ StaticR js_qrcode_js
+            addScript $ StaticR js_jscookie_js
             $(widgetFile "default-layout")
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 

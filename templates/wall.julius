@@ -1,5 +1,10 @@
 var swreg = null;
 var lastNotiTime = new Date();
+var nick     = $('#nick');
+var body     = $('#body');
+var posts    = $('#posts');
+var sendbtn  = $('#send');
+var notify   = $('#notify');
 
 function postMessage(ws, nick, body) {
     var post = {
@@ -29,7 +34,7 @@ function setupNotifications() {
     });
 }
 
-function mainLoop(nick, body, posts, sendbtn) {
+function mainLoop() {
     var listMsg = {
         "type": "list",
         "key": #{toJSON key}
@@ -54,7 +59,7 @@ function mainLoop(nick, body, posts, sendbtn) {
                 posts.prepend(postNode);
 
                 if (null != swreg) {
-                    if (msg.post.nick != nick.val() && msg.post.time >= lastNotiTime) {
+                    if (msg.post.nick != nick.val() && msg.post.time >= lastNotiTime && notify.prop('checked') && !document.hasFocus()) {
                         swreg.showNotification("Message from " + msg.post.nick);
                         lastNotiTime = msg.post.time;
                     }
@@ -70,7 +75,7 @@ function mainLoop(nick, body, posts, sendbtn) {
     };
 
     ws.onclose = function() {
-        setTimeout(function() {mainLoop(nick, body, posts, sendbtn)}, 2000);
+        setTimeout(function() {mainLoop()}, 2000);
     };
 
     var sendf = function(event) {
@@ -104,10 +109,7 @@ function mainLoop(nick, body, posts, sendbtn) {
 }
 
 $(document).ready(function () {
-    var nick = $('#nick');
-    var body = $('#body');
-    var posts = $('#posts');
-    var sendbtn = $('#send');
+    $('#postform').submit(function(){return false});
 
     var qrcode = new QRCode("qrcode", {
         text: #{toJSON $ urlRender $ WallR key},
@@ -118,9 +120,24 @@ $(document).ready(function () {
         correctLevel : QRCode.CorrectLevel.L
     });
 
+    nick.change(function () {
+        Cookies.set('nick', nick.val(), {'expires': 1000, 'path':'/wall/'+#{toJSON key}});
+    });
+
+    nick.keypress(function(event) {
+        if (event.keyCode == 13) {
+            body.focus();
+        }
+    });
+
+    if (Cookies.get('nick') != undefined) {
+        nick.val(Cookies.get('nick'));
+        nick.change();
+    }
+
     body.focus();
 
     setupNotifications();
 
-    mainLoop(nick, body, posts, sendbtn);
+    mainLoop();
 });
