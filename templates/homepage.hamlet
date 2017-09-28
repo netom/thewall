@@ -1,5 +1,5 @@
 <div class="jumbotron">
-  <h1>Talk now.
+  <h1>Now We're Talking.
   <p class="lead">Dear Visitor! Here is your link to a new message wall:
   <p>
     <a class="btn btn-xs btn-success" href="#" role="button" id="walllink"></a>

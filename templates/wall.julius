@@ -12,6 +12,10 @@ function postMessage(ws, nick, body) {
     ws.send(JSON.stringify(post));
 }
 
+function formError(msg) {
+    alert(msg);
+}
+
 function mainLoop(nick, body, posts, sendbtn) {
     var listMsg = {
         "type": "list",
@@ -29,12 +33,11 @@ function mainLoop(nick, body, posts, sendbtn) {
 
         switch (msg.type) {
             case 'post':
-                posts.html(
-                    '<li class="post"><span class="nick">' + msg.post.nick +
-                    '</span> <span class="time">' + msg.post.time +
-                    '</span><br/>' + msg.post.body + '</li>' +
-                    posts.html()
-                );
+                var postNode = $('<li class="post"><span class="nick"></span> <span class="time"></span><br/><pre></pre></li>');
+                $('.nick', postNode).text(msg.post.nick);
+                $('.time', postNode).text(msg.post.time);
+                $('pre',postNode).text(msg.post.body);
+                posts.prepend(postNode);
                 break;
         }
     };
@@ -49,14 +52,30 @@ function mainLoop(nick, body, posts, sendbtn) {
     };
 
     var sendf = function(event) {
+        if (nick.val().length <= 0) {
+            formError("Enter a nickname");
+            return false;
+        }
+        if (nick.val().length > 128) {
+            formError("Nick too long (>128)");
+            return false;
+        }
+        if (body.val().length <= 0) {
+            formError("Enter a message");
+            return false;
+        }
+        if (body.val().length > #{toJSON postMaxSize}) {
+            formError("Message too long (>#{toJSON postMaxSize})");
+            return false;
+        }
         postMessage(ws, nick.val(), body.val());
+        body.val('');
         return false;
     };
 
     body.keydown(function(event) {
-        if (event.shiftKey && event.keyCode == 13) {
-            sendf(event);
-            return false;
+        if (event.ctrlKey && event.keyCode == 13) {
+            return sendf(event);
         }
     });
     sendbtn.click(sendf);

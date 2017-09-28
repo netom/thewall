@@ -18,8 +18,11 @@ getWallR :: Text -> Handler Html
 getWallR key = do
     yesod <- getYesod
 
-    let ttl = appTtl $ appSettings yesod
-    let tvpostmap = appPosts yesod
+    let tvpostmap   = appPosts yesod
+    let settings    = appSettings yesod
+
+    let ttl         = appTtl settings
+    let postMaxSize = appPostMaxSize settings
 
     webSockets $ do
         conn <- ask
@@ -49,7 +52,7 @@ getWallR key = do
                         _ -> return () -- The message couldn't be decoded, just swallow the error and continue.
                     rxLoop -- We're good, continue serving
                  Left _ -> return () -- An exception were thrown, leave the connection.
-             in liftIO $ rxLoop -- TODO: does forkIO really work here?
+             in liftIO $ rxLoop
 
     urlRender <- getUrlRender
 
