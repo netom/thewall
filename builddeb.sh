@@ -2,12 +2,13 @@
 
 PROJECTNAME=thewall
 MAJOR=1
-MINOR=7
+MINOR=8
 PKREV=1
 
 BUILDDIR=.build/${PROJECTNAME}_${MAJOR}.${MINOR}-${PKREV}
 
 stack setup
+stack clean
 stack build
 
 mkdir -p $BUILDDIR/DEBIAN
@@ -39,7 +40,6 @@ mkdir -p $BUILDDIR/opt/thewall/config
 cp config/* $BUILDDIR/opt/thewall/config
 
 rm -rf static/tmp/*
-rm -rf static/combined/*
 
 mkdir -p $BUILDDIR/opt/thewall/static
 cp -r static/* $BUILDDIR/opt/thewall/static
