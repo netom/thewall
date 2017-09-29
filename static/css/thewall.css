@@ -87,3 +87,7 @@ body {
 .btn-send {
   margin-bottom: 5px;
 }
+
+pre {
+  white-space:pre-wrap;
+}
