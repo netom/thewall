@@ -5,6 +5,7 @@
   <textarea id="body" placeholder="Type your message">
   <button id="send" type="button" class="btn btn-success btn-send">Send
   <small>Or press CTRL+ENTER
+  <button id="delete" type="button" class="btn btn-danger btn-delete">DELETE THIS ALL
 
 <ul id="posts">
 

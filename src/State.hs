@@ -59,14 +59,11 @@ gcPosts tvpostmap = do
     now <- getCurrentTime
     atomically $ modifyTVar tvpostmap (H.filter (\x -> postListExpire x >= now))
 
--- getNewPosts :: TVar PostMap -> Text -> Int -> Int -> IO PostList
--- getNewPosts tvpostmap key ttl lastVersion = do
-    -- pl <- getPosts tvpostmap key ttl
-
-    -- if lastVersion >= postListVersion pl
-        -- then do
-            -- mychan <- atomically $ dupTChan $ postListChannel pl
-            -- Why I need to do these in separate transactions?
-            -- _ <- atomically $ readTChan mychan
-            -- getPosts tvpostmap key ttl
-        -- else return pl
+deletePosts :: TVar PostMap -> Text -> Int -> IO ()
+deletePosts tvpostmap key ttl = do
+    withPostlist tvpostmap key ttl (\_ _ -> do
+            return ()
+        ) (\tvpm expires (PostList chan _ _) -> do
+            modifyTVar tvpm (H.alter (\_ -> Just $ PostList chan expires []) key)
+            writeTChan chan $ WsDelete key
+        )

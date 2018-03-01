@@ -36,7 +36,7 @@ instance FromJSON Post where
     parseJSON _ = empty
 
 -- A message over a websocket connection
-data WsMessage = WsPost Text Post | WsList Text
+data WsMessage = WsPost Text Post | WsList Text | WsDelete Text
 
 instance ToJSON WsMessage where
     toJSON (WsPost key post) = object
@@ -48,13 +48,18 @@ instance ToJSON WsMessage where
         [ "type" .= ("list" :: Text)
         , "key"  .= key
         ]
+    toJSON (WsDelete key) = object
+        [ "type" .= ("delete" :: Text)
+        , "key"  .= key
+        ]
 
 instance FromJSON WsMessage where
     parseJSON (Object v) = 
         case lookup "type" v of
-            Just "post" -> WsPost <$> v .: "key" <*> v .: "post"
-            Just "list" -> WsList <$> v .: "key"
-            _           -> empty
+            Just "post"   -> WsPost   <$> v .: "key" <*> v .: "post"
+            Just "list"   -> WsList   <$> v .: "key"
+            Just "delete" -> WsDelete <$> v .: "key"
+            _             -> empty
     parseJSON _ = empty
 
 -- A "PostList" is actually a timestamp, a list-of-posts, and a channel.

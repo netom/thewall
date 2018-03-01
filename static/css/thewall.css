@@ -88,6 +88,12 @@ body {
   margin-bottom: 5px;
 }
 
+.btn-delete {
+  margin-bottom: 5px;
+  display: block;
+  float: right;
+}
+
 pre {
   white-space:pre-wrap;
 }

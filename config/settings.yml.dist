@@ -21,7 +21,7 @@ ip-from-header: "_env:IP_FROM_HEADER:false"
 # skip-combining: false
 
 # Bitcoin address for donations
-btcAddress: "1FVpwUHpkTy6SVLVPM6encMTHLSpi6ru4z"
+btcAddress: "3KQM3rg4jRfmqV2923GPBWr3DUNKR4GU5h"
 
 # Wall TTL in seconds
 ttl: 86400

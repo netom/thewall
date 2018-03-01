@@ -1,13 +1,14 @@
 var swreg = null;
 var lastNotiTime = new Date();
-var nick     = $('#nick');
-var body     = $('#body');
-var posts    = $('#posts');
-var sendbtn  = $('#send');
-var notify   = $('#notify');
+var nick      = $('#nick');
+var body      = $('#body');
+var posts     = $('#posts');
+var sendbtn   = $('#send');
+var deletebtn = $('#delete');
+var notify    = $('#notify');
 
 function postMessage(ws, nick, body) {
-    var post = {
+    var msg = {
         "type":"post",
         "key":#{toJSON key},
         "post":{
@@ -16,7 +17,15 @@ function postMessage(ws, nick, body) {
             "body":body
         }
     };
-    ws.send(JSON.stringify(post));
+    ws.send(JSON.stringify(msg));
+}
+
+function deleteMessages(ws) {
+    var msg = {
+        "type":"delete",
+        "key":#{toJSON key}
+    };
+    ws.send(JSON.stringify(msg));
 }
 
 function formError(msg) {
@@ -66,6 +75,9 @@ function mainLoop() {
                 }
 
                 break;
+            case 'delete':
+                posts.empty();
+                break;
         }
     };
 
@@ -105,7 +117,15 @@ function mainLoop() {
             return sendf(event);
         }
     });
+
     sendbtn.click(sendf);
+
+    deletebtn.click(function(event) {
+        if (confirm("Really?")) {
+            deleteMessages(ws);
+        }
+        return false;
+    });
 }
 
 $(document).ready(function () {

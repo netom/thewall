@@ -49,6 +49,9 @@ getWallR key = do
                             forM_ (reverse $ postListPosts pl) $ WS.sendTextData conn . encode . WsPost wsKey
                         Just (WsPost wsKey wsPost) -> do
                             addPost tvpostmap wsKey wsPost ttl
+                        Just (WsDelete wsKey) -> do
+                            deletePosts tvpostmap wsKey ttl
+                            WS.sendTextData conn msg
                         _ -> return () -- The message couldn't be decoded, just swallow the error and continue.
                     rxLoop -- We're good, continue serving
                  Left _ -> return () -- An exception were thrown, leave the connection.
