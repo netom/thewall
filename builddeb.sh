@@ -11,7 +11,11 @@ stack setup
 stack clean
 stack build
 
-mkdir -p $BUILDDIR/DEBIAN
+if [ ! -d "$BUILDDIR" ]; then
+  mkdir -p $BUILDDIR
+fi
+
+mkdir $BUILDDIR/DEBIAN
 tee $BUILDDIR/DEBIAN/control <<EOF
 Package: $PROJECTNAME
 Version: $MAJOR.$MINOR-$PKREV
@@ -55,8 +59,9 @@ stop on runlevel [!2345]
 respawn
 respawn limit 100 5
 
+chdir /opt/thewall
+
 script
-  cd /opt/thewall
   exec sudo -u thewall ./bin/thewall /opt/thewall/config/settings.yml
 end script
 EOF
