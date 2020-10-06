@@ -2,13 +2,13 @@
 
 PROJECTNAME=thewall
 MAJOR=1
-MINOR=9
-PKREV=1
+MINOR=10
+PKREV=0
 
 BUILDDIR=.build/${PROJECTNAME}_${MAJOR}.${MINOR}-${PKREV}
 
-stack setup
-stack clean
+#stack setup
+#stack clean
 stack build
 
 if [ ! -d "$BUILDDIR" ]; then
