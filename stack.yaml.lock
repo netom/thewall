@@ -13,7 +13,7 @@ packages:
     hackage: haskell-qrencode-1.0.4
 snapshots:
 - completed:
-    size: 504771
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/12/14.yaml
-    sha256: 3cbd6c83316dd5e2bbc756dc7a2a4e31a31859c3f8b5c720efb6850b08e42649
-  original: lts-12.14
+    size: 524996
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/14/27.yaml
+    sha256: 7ea31a280c56bf36ff591a7397cc384d0dff622e7f9e4225b47d8980f019a0f0
+  original: lts-14.27
