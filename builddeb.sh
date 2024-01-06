@@ -3,7 +3,7 @@
 PROJECTNAME=thewall
 MAJOR=1
 MINOR=10
-PKREV=0
+PKREV=2
 
 BUILDDIR=.build/${PROJECTNAME}_${MAJOR}.${MINOR}-${PKREV}
 
@@ -22,7 +22,7 @@ Version: $MAJOR.$MINOR-$PKREV
 Section: base
 Priority: optional
 Architecture: amd64
-Depends: libc6, libgmp10, libffi6, libstdc++6, libgcc1, libqrencode3
+Depends: libc6, libgmp10, libffi8, libstdc++6, libgcc-s1, libqrencode4
 Maintainer: Fábián Tamás László <giganetom@gmail.com>
 Description: The Wall - anonymous forgetfull web IM
  Shows a web page that can be used as an instant messaging interface.
